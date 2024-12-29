@@ -26,12 +26,11 @@ flutter:
   assets:
     - assets/
     - assets/icons/
+    - assets/image/
+    - assets/image/logo.png
     - assets/icons/icon.png
 
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/icons/logo.png"
-  android_icon: true
-  ios_icon: true
-  web_icon: true
+  image_path: "assets/icons/icon.png"
