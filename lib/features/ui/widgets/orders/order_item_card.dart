@@ -13,27 +13,27 @@ class OrderItemCard extends StatelessWidget {
           children: [
             Image.asset(
               'assets/image/logo.png',
-              width: 60,
-              height: 60,
+              width: 70,
+              height: 70,
               fit: BoxFit.cover,
             ),
             const SizedBox(width: 16),
             const Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     'Pizza de Parrila',
                     style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.red,
+                      fontSize: 16,
+                      color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     'R\$ 98.00',
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 18,
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
                     ),
@@ -45,6 +45,7 @@ class OrderItemCard extends StatelessWidget {
               children: [
                 IconButton(
                   icon: const Icon(Icons.remove_circle, color: Colors.red),
+                  iconSize: 30,
                   onPressed: () {},
                 ),
                 const Text(
@@ -53,6 +54,7 @@ class OrderItemCard extends StatelessWidget {
                 ),
                 IconButton(
                   icon: const Icon(Icons.add_circle, color: Colors.red),
+                  iconSize: 30,
                   onPressed: () {},
                 ),
               ],
