@@ -18,40 +18,36 @@ class _HomePageState extends State<HomePage> {
         title: Row(
           children: [
             Image.asset('assets/image/logo.png', height: 40),
-            Spacer(),
-            Icon(Icons.sunny, color: Colors.black),
-            SizedBox(width: 16),
-            Icon(Icons.person, color: Colors.black),
+            const Spacer(),
+            const Icon(Icons.sunny, color: Colors.red),
           ],
         ),
       ),
       body: const HomeSession(),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.red,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              size: 30,
-            ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.shopping_cart,
-              size: 30,
-            ),
-            label: 'Carrinho',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.favorite,
-              size: 30,
-            ),
-            label: 'Favoritos',
-          ),
-        ],
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Icon(Icons.home, color: Colors.white, size: 30),
+            Icon(Icons.shopping_cart, color: Colors.white, size: 30),
+            Icon(Icons.favorite, color: Colors.white, size: 30),
+            Icon(Icons.assignment, color: Colors.white, size: 30),
+          ],
+        ),
       ),
     );
   }
 }
+
+
+
+
+
+
+
