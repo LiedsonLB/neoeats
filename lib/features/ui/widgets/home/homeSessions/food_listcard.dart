@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neoeats/core/constants/colors.dart';
 
 class FoodListCard extends StatelessWidget {
   const FoodListCard({super.key});
@@ -49,7 +50,7 @@ class FoodListCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Colors.red,
+                      color: AppColors.red,
                     ),
                   ),
                 ],
@@ -58,7 +59,7 @@ class FoodListCard extends StatelessWidget {
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
+                backgroundColor: AppColors.red,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),

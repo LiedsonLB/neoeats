@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neoeats/core/constants/colors.dart';
 
 class FavoriteCard extends StatelessWidget {
   const FavoriteCard({super.key});
@@ -57,7 +58,7 @@ class FavoriteCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Colors.red,
+                      color: AppColors.red,
                     ),
                   ),
                 ],
@@ -66,15 +67,15 @@ class FavoriteCard extends StatelessWidget {
             Column(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.favorite, color: Colors.red),
+                  icon: const Icon(Icons.favorite, color: AppColors.red),
                   onPressed: () {},
                 ),
                 ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
+                    backgroundColor: AppColors.red,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                   child: const Text(
