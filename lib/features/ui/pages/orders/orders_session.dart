@@ -61,8 +61,8 @@ class OrdersSession extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: const [
+              const Row(
+                children: [
                   Text(
                     'Total:',
                     style: TextStyle(
@@ -93,9 +93,9 @@ class OrdersSession extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {},
-                child: Row(
+                child: const Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     Text(
                       'Confirmar',
                       style: TextStyle(
@@ -104,7 +104,7 @@ class OrdersSession extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    SizedBox(width: 8), 
+                    SizedBox(width: 8),
                     Icon(
                       Icons.check,
                       color: Colors.white,
@@ -113,6 +113,24 @@ class OrdersSession extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            margin: const EdgeInsets.only(top: 16),
+            decoration: BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Icon(Icons.home, color: Colors.white, size: 30),
+                Icon(Icons.shopping_cart, color: Colors.white, size: 30),
+                Icon(Icons.favorite, color: Colors.white, size: 30),
+                Icon(Icons.assignment, color: Colors.white, size: 30),
+              ],
+            ),
           ),
         ],
       ),
