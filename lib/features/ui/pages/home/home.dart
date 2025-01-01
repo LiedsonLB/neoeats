@@ -18,17 +18,17 @@ class _HomePageState extends State<HomePage> {
         title: Row(
           children: [
             Image.asset('assets/image/logo.png', height: 40),
-            Spacer(),
-            Icon(Icons.sunny, color: Colors.black),
-            SizedBox(width: 16),
-            Icon(Icons.person, color: Colors.black),
+            const Spacer(),
+            const Icon(Icons.sunny, color: Colors.black),
+            const SizedBox(width: 16),
+            const Icon(Icons.person, color: Colors.black),
           ],
         ),
       ),
       body: const HomeSession(),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.red,
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(
               Icons.home,

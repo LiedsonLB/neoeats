@@ -6,6 +6,8 @@ void main() {
 }
 
 class NeoEatsApp extends StatelessWidget {
+  const NeoEatsApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

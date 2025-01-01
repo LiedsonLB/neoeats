@@ -61,8 +61,8 @@ class OrdersSession extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: const [
+              const Row(
+                children: [
                   Text(
                     'Total:',
                     style: TextStyle(
@@ -93,9 +93,9 @@ class OrdersSession extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {},
-                child: Row(
+                child: const Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     Text(
                       'Confirmar',
                       style: TextStyle(
