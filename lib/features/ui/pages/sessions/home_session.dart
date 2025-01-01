@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:neoeats/features/ui/widgets/home/homeSessions/card_category_chip.dart';
-import 'package:neoeats/features/ui/widgets/home/homeSessions/card_food_list.dart';
-import 'package:neoeats/features/ui/widgets/home/homeSessions/card_food_session.dart';
+import 'package:neoeats/features/ui/widgets/home/homeSessions/category_button.dart';
+import 'package:neoeats/features/ui/widgets/home/homeSessions/food_listcard.dart';
+import 'package:neoeats/features/ui/widgets/home/homeSessions/recommended_foodcard.dart';
 
 class HomeSession extends StatefulWidget {
   const HomeSession({super.key});
@@ -19,53 +19,97 @@ class _HomeSessionState extends State<HomeSession> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'O que vai pedir hoje?',
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'O que vai pedir hoje ?',
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25),
+                        borderSide: const BorderSide(
+                          color: Colors
+                              .transparent, 
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25),
+                        borderSide: const BorderSide(
+                          color: Colors
+                              .transparent, 
+                        ),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(width: 8),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white),
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.tune),
+                    onPressed: () {},
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 16),
-            const SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  CardCategoryChip(label: 'Todos', isSelected: true),
-                  CardCategoryChip(label: 'Café', isSelected: false),
-                  CardCategoryChip(label: 'Sobremesa', isSelected: false),
-                  CardCategoryChip(label: 'Fast Food', isSelected: false),
+            SizedBox(
+              height: 35,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: const [
+                  CategoryButton(label: 'TODOS', isSelected: true),
+                  CategoryButton(label: 'CAFÉ', isSelected: false),
+                  CategoryButton(label: 'SOBREMESA', isSelected: false),
+                  CategoryButton(label: 'FAST FOOD', isSelected: false),
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
             const Text(
               'Pratos Recomendados',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            const SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  CardFoodSession(),
-                  CardFoodSession(),
-                ],
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: Colors.red,
               ),
             ),
             const SizedBox(height: 16),
+            SizedBox(
+              height: 200,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: const [
+                  RecommendedFoodCard(),
+                  RecommendedFoodCard(),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
             const Text(
               'Todos os pratos',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: Colors.red,
+              ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 16),
             const Column(
               children: [
-                CardFoodList(),
-                CardFoodList(),
+                FoodListCard(),
+                SizedBox(height: 12),
+                FoodListCard(),
               ],
             ),
           ],
