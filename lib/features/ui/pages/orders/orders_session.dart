@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neoeats/core/constants/colors.dart';
 import 'package:neoeats/features/ui/widgets/orders/order_item_card.dart';
 
 class OrdersSession extends StatelessWidget {
@@ -76,18 +77,15 @@ class OrdersSession extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.red,
+                      color: AppColors.red,
                     ),
                   ),
                 ],
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 16,
-                  ),
+                  backgroundColor: AppColors.red,
+    
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -113,24 +111,6 @@ class OrdersSession extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            margin: const EdgeInsets.only(top: 16),
-            decoration: BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Icon(Icons.home, color: Colors.white, size: 30),
-                Icon(Icons.shopping_cart, color: Colors.white, size: 30),
-                Icon(Icons.favorite, color: Colors.white, size: 30),
-                Icon(Icons.assignment, color: Colors.white, size: 30),
-              ],
-            ),
           ),
         ],
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neoeats/core/constants/colors.dart';
 
 class CategoryButton extends StatelessWidget {
   final String label;
@@ -17,13 +18,13 @@ class CategoryButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () {},
         style: ElevatedButton.styleFrom(
-          backgroundColor: isSelected ? Colors.red : Colors.white,
+          backgroundColor: isSelected ? AppColors.red : Colors.white,
           foregroundColor: isSelected ? Colors.white : Colors.black,
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
             side: BorderSide(
-              color: isSelected ? Colors.red : Colors.grey.shade300,
+              color: isSelected ? AppColors.red : Colors.grey.shade300,
             ),
           ),
         ),

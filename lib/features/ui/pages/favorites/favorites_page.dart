@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neoeats/core/constants/colors.dart';
 import 'package:neoeats/features/ui/widgets/favorites/favorite_card.dart';
 
 class FavoritesPage extends StatelessWidget {
@@ -14,7 +15,7 @@ class FavoritesPage extends StatelessWidget {
         title: const Text(
           'Meus Favoritos',
           style: TextStyle(
-            color: Colors.red,
+            color: AppColors.red,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -54,7 +55,7 @@ class FavoritesPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
-                color: Colors.red,
+                color: AppColors.red,
               ),
             ),
             const SizedBox(height: 16),
@@ -69,23 +70,6 @@ class FavoritesPage extends StatelessWidget {
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        margin: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.red,
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Icon(Icons.home, color: Colors.white, size: 30),
-            Icon(Icons.shopping_cart, color: Colors.white, size: 30),
-            Icon(Icons.favorite, color: Colors.white, size: 30),
-            Icon(Icons.assignment, color: Colors.white, size: 30),
           ],
         ),
       ),

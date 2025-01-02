@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neoeats/core/constants/colors.dart';
 import 'package:neoeats/features/ui/pages/orders/orders_session.dart';
 
 class OrdersPage extends StatelessWidget {
@@ -11,12 +12,12 @@ class OrdersPage extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.red),
+          icon: const Icon(Icons.arrow_back, color: AppColors.red),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
           'Meus pedidos',
-          style: TextStyle(color: Colors.red,
+          style: TextStyle(color: AppColors.red,
           fontWeight: FontWeight.bold,
           ),
         ),
