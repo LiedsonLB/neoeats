@@ -21,155 +21,123 @@ class DatabaseService {
       version: 1,
       onCreate: _createDB,
       onOpen: (db) async {
-        await db
-            .execute('PRAGMA foreign_keys = ON;');
+        await db.execute('PRAGMA foreign_keys = ON;');
       },
     );
   }
 
   Future _createDB(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE Clientes (
+      CREATE TABLE Cliente (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nome TEXT NOT NULL,
         email TEXT NOT NULL,
-        tipo TEXT CHECK(tipo IN ('cliente', 'gerente')) NOT NULL,
+        acesso TEXT CHECK(acesso IN ('cliente', 'gerente')) NOT NULL,
         telefone TEXT,
         data_cadastro TEXT NOT NULL
       );
 
-      CREATE TABLE Mesas (
+      CREATE TABLE Mesa (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        numero INTEGER NOT NULL,
         capacidade INTEGER NOT NULL,
-        status TEXT CHECK(status IN ('ocupada', 'disponivel', 'reservada')) NOT NULL
+        status TEXT CHECK(status IN ('livre', 'ocupada')) NOT NULL
       );
 
-      CREATE TABLE CategoriaDoCardapio (
+      CREATE TABLE Categoria (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome TEXT NOT NULL
+        nome TEXT NOT NULL UNIQUE
       );
 
-      CREATE TABLE Pratos (
+      CREATE TABLE Prato (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nome TEXT NOT NULL,
-        preco REAL NOT NULL,
-        categoria_id INTEGER NOT NULL,
+        imagem TEXT,
         descricao TEXT,
-        disponivel INTEGER NOT NULL CHECK(disponivel IN (0, 1))
+        preco REAL NOT NULL,
+        id_categoria INTEGER NOT NULL,
+        status TEXT CHECK(status IN ('ativo', 'inativo')) NOT NULL,
 
-        FOREIGN KEY(categoria_id) REFERENCES CategoriaDoCardapio(id)
+        FOREIGN KEY (id_categoria) REFERENCES Categoria (id)
       );
 
-      CREATE TABLE Ingredientes (
+      CREATE TABLE Favorito (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome TEXT NOT NULL,
-        item_id INTEGER NOT NULL,
-        FOREIGN KEY(item_id) REFERENCES Pratos(id)
+        id_cliente INTEGER NOT NULL,
+        id_prato INTEGER NOT NULL,
+
+        FOREIGN KEY (id_cliente) REFERENCES Clientes (id),
+        FOREIGN KEY (id_prato) REFERENCES Prato (id)
       );
 
-      CREATE TABLE Pedidos (
+      CREATE TABLE Pedido (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        cliente_id INTEGER NOT NULL,
-        status TEXT CHECK(status IN ('pendente', 'em andamento', 'finalizado', 'cancelado')) NOT NULL,
-        data_criacao TEXT NOT NULL,
-        data_conclusao TEXT,
-        mesa_id INTEGER,
-        FOREIGN KEY(cliente_id) REFERENCES Clientes(id),
-        FOREIGN KEY(mesa_id) REFERENCES Mesas(id)
+        id_mesa INTEGER NOT NULL,
+        data_pedido TEXT NOT NULL,
+        status TEXT CHECK(status IN ('aberto', 'fechado')) NOT NULL,
+
+        FOREIGN KEY (id_mesa) REFERENCES Mesa (id)
       );
 
-      CREATE TABLE PedidosItens (
-        pedido_id INTEGER NOT NULL,
-        item_id INTEGER NOT NULL,
+      CREATE TABLE PedidoPrato (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id_pedido INTEGER NOT NULL,
+        id_prato INTEGER NOT NULL,
         quantidade INTEGER NOT NULL,
         preco_unitario REAL NOT NULL,
-        PRIMARY KEY (pedido_id, item_id),
-        FOREIGN KEY(pedido_id) REFERENCES Pedidos(id),
-        FOREIGN KEY(item_id) REFERENCES Pratos(id)
+
+        FOREIGN KEY (id_pedido) REFERENCES Pedido (id),
+        FOREIGN KEY (id_prato) REFERENCES Prato (id)
       );
 
-      CREATE TABLE Pagamentos (
+      CREATE TABLE Pagamento (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        pedido_id INTEGER NOT NULL,
-        valor_total REAL NOT NULL,
-        status TEXT CHECK(status IN ('pendente', 'pago', 'cancelado')) NOT NULL,
-        data_pagamento TEXT,
-        metodo_pagamento TEXT CHECK(metodo_pagamento IN ('dinheiro', 'cartao', 'pix', 'outro')) NOT NULL,
-        FOREIGN KEY(pedido_id) REFERENCES Pedidos(id)
+        id_pedido INTEGER NOT NULL,
+        valor REAL NOT NULL,
+        data_pagamento TEXT NOT NULL,
+        tipo_pagamento TEXT CHECK(tipo_pagamento IN ('dinheiro', 'cartao', 'pix')) NOT NULL,
+
+        FOREIGN KEY (id_pedido) REFERENCES Pedido (id)
       );
+
     ''');
   }
 
-  Future<void> saveOrder(int clienteId, int mesaId, String status,
-      List<Map<String, dynamic>> items) async {
-    final db = await instance.database;
-
-    final isoDate = DateTime.now().toIso8601String();
-
-    final orderData = {
-      'cliente_id': clienteId,
-      'status': status,
-      'data_criacao': isoDate,
-      'mesa_id': mesaId,
-    };
-
-    final orderId = await db.insert('Pedidos', orderData);
-
-    for (var item in items) {
-      await db.insert('PedidosItens', {
-        'pedido_id': orderId,
-        'item_id': item['item_id'],
-        'quantidade': item['quantidade'],
-        'preco_unitario': item['preco_unitario'],
-      });
-    }
-
-    print('Pedido salvo com sucesso');
+  Future<List<Map<String, dynamic>>> query(String table) async {
+    final db = await database;
+    return await db.query(table);
   }
 
-  Future<void> savePayment(int pedidoId, double valorTotal, String status,
-      String metodoPagamento) async {
-    final db = await instance.database;
-
-    final isoDate = DateTime.now().toIso8601String();
-
-    final paymentData = {
-      'pedido_id': pedidoId,
-      'valor_total': valorTotal,
-      'status': status,
-      'data_pagamento': isoDate,
-      'metodo_pagamento': metodoPagamento,
-    };
-
-    await db.insert('Pagamentos', paymentData);
-    print('Pagamento registrado com sucesso');
+  Future<int> insert(String table, Map<String, dynamic> data) async {
+    final db = await database;
+    return await db.insert(table, data);
   }
 
-  Future<List<Map<String, dynamic>>> fetchTables() async {
-    final db = await instance.database;
-    return await db.query('Mesas');
+  Future<int> update(
+    String table,
+    Map<String, dynamic> values, {
+    String? where,
+    List<dynamic>? whereArgs,
+  }) async {
+    final db = await database;
+    return await db.update(
+      table,
+      values,
+      where: where,
+      whereArgs: whereArgs,
+    );
   }
 
-  Future<List<Map<String, dynamic>>> fetchClients() async {
-    final db = await instance.database;
-    return await db.query('Clientes');
-  }
-
-  Future<List<Map<String, dynamic>>> fetchOrders() async {
-    final db = await instance.database;
-    return await db.query('Pedidos', orderBy: 'data_criacao DESC');
-  }
-
-  Future<List<Map<String, dynamic>>> fetchMenuItems() async {
-    final db = await instance.database;
-    return await db.query('Pratos');
-  }
-
-  Future<List<Map<String, dynamic>>> fetchIngredientsForItem(int itemId) async {
-    final db = await instance.database;
-    return await db
-        .query('Ingredientes', where: 'item_id = ?', whereArgs: [itemId]);
+  Future<int> delete(
+    String table, {
+    String? where,
+    List<dynamic>? whereArgs,
+  }) async {
+    final db = await database;
+    return await db.delete(
+      table,
+      where: where,
+      whereArgs: whereArgs,
+    );
   }
 
   Future<void> close() async {

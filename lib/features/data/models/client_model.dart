@@ -2,38 +2,40 @@ class ClientModel {
   final int? id;
   final String nome;
   final String email;
-  final int roleId;
+  final String acesso;
   final String? telefone;
-  final String dataCadastro;
+  final DateTime? dataCadastro;
 
   ClientModel({
     this.id,
     required this.nome,
     required this.email,
-    required this.roleId,
+    required this.acesso,
     this.telefone,
-    required this.dataCadastro,
+    this.dataCadastro,
   });
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'nome': nome,
       'email': email,
-      'role_id': roleId,
+      'acesso': acesso,
       'telefone': telefone,
-      'data_cadastro': dataCadastro,
+      'data_cadastro': dataCadastro?.toIso8601String(),
     };
   }
 
-  factory ClientModel.fromMap(Map<String, dynamic> map) {
+  factory ClientModel.fromJson(Map<String, dynamic> map) {
     return ClientModel(
       id: map['id'],
-      nome: map['nome'],
-      email: map['email'],
-      roleId: map['role_id'],
+      nome: map['nome'] ?? '',
+      email: map['email'] ?? '',
+      acesso: map['acesso'] ?? '',
       telefone: map['telefone'],
-      dataCadastro: map['data_cadastro'],
+      dataCadastro: map['data_cadastro'] != null
+          ? DateTime.parse(map['data_cadastro'])
+          : null,
     );
   }
 }
