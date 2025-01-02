@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neoeats/core/constants/colors.dart';
 import 'package:neoeats/features/ui/widgets/home/homeSessions/category_button.dart';
 import 'package:neoeats/features/ui/widgets/home/homeSessions/food_listcard.dart';
 import 'package:neoeats/features/ui/widgets/home/homeSessions/recommended_foodcard.dart';
@@ -81,7 +82,7 @@ class _HomeSessionState extends State<HomeSession> {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
-                color: Colors.red,
+                color: AppColors.red,
               ),
             ),
             const SizedBox(height: 16),
@@ -101,7 +102,7 @@ class _HomeSessionState extends State<HomeSession> {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
-                color: Colors.red,
+                color: AppColors.red,
               ),
             ),
             const SizedBox(height: 16),

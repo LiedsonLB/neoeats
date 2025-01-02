@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neoeats/core/constants/colors.dart';
 
 class RecommendedFoodCard extends StatelessWidget {
   const RecommendedFoodCard({super.key});
@@ -43,14 +44,14 @@ class RecommendedFoodCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Colors.red,
+                  color: AppColors.red,
                 ),
               ),
               const Spacer(),
               Container(
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: Colors.red,
+                  color: AppColors.red,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neoeats/core/constants/colors.dart';
 
 class OrderItemCard extends StatelessWidget {
   const OrderItemCard({super.key});
@@ -34,7 +35,7 @@ class OrderItemCard extends StatelessWidget {
                     'R\$ 98.00',
                     style: TextStyle(
                       fontSize: 18,
-                      color: Colors.red,
+                      color: AppColors.red,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -44,7 +45,7 @@ class OrderItemCard extends StatelessWidget {
             Row(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.remove_circle, color: Colors.red),
+                  icon: const Icon(Icons.remove_circle, color: AppColors.red),
                   iconSize: 30,
                   onPressed: () {},
                 ),
@@ -53,7 +54,7 @@ class OrderItemCard extends StatelessWidget {
                   style: TextStyle(fontSize: 16),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.add_circle, color: Colors.red),
+                  icon: const Icon(Icons.add_circle, color: AppColors.red),
                   iconSize: 30,
                   onPressed: () {},
                 ),

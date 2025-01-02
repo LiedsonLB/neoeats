@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:neoeats/core/constants/colors.dart';
+import 'package:neoeats/features/ui/widgets/order_status/order_status_step.dart';
 
 class OrderStatusPage extends StatelessWidget {
   const OrderStatusPage({super.key});
@@ -13,7 +15,7 @@ class OrderStatusPage extends StatelessWidget {
       title: const Text(
         'Status do Pedido',
         style: TextStyle(
-          color: Colors.red,
+          color: AppColors.red,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -35,7 +37,7 @@ class OrderStatusPage extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.red,
+                      color: AppColors.red,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Icon(
@@ -74,7 +76,7 @@ class OrderStatusPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
-                color: Colors.red,
+                color: AppColors.red,
               ),
             ),
             const SizedBox(height: 16),
@@ -180,99 +182,7 @@ class OrderStatusPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        margin: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.red,
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Icon(Icons.home, color: Colors.white, size: 30),
-            Icon(Icons.shopping_cart, color: Colors.white, size: 30),
-            Icon(Icons.favorite, color: Colors.white, size: 30),
-            Icon(Icons.assignment, color: Colors.white, size: 30),
-          ],
-        ),
-      ),
     );
   }
 }
 
-class OrderStatusStep extends StatelessWidget {
-  final String title;
-  final String time;
-  final bool isCompleted;
-  final bool isLast;
-
-  const OrderStatusStep({
-    super.key,
-    required this.title,
-    required this.time,
-    required this.isCompleted,
-    this.isLast = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return IntrinsicHeight(
-      child: Row(
-        children: [
-          Column(
-            children: [
-              Container(
-                width: 20,
-                height: 20,
-                decoration: BoxDecoration(
-                  color: isCompleted ? Colors.red : Colors.grey.shade300,
-                  shape: BoxShape.circle,
-                ),
-                child: isCompleted
-                    ? const Icon(
-                        Icons.check,
-                        color: Colors.white,
-                        size: 12,
-                      )
-                    : null,
-              ),
-              if (!isLast)
-                Expanded(
-                  child: Container(
-                    width: 2,
-                    color: isCompleted ? Colors.red : Colors.grey.shade300,
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontWeight:
-                          isCompleted ? FontWeight.bold : FontWeight.normal,
-                      color: isCompleted ? Colors.black : Colors.grey,
-                    ),
-                  ),
-                  Text(
-                    time,
-                    style: TextStyle(
-                      color: isCompleted ? Colors.black : Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
