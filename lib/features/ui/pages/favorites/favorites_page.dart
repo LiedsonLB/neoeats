@@ -1,79 +1,89 @@
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:neoeats/core/constants/colors.dart';
-import 'package:neoeats/features/ui/widgets/favorites/favorite_card.dart';
+import 'package:neoeats/features/ui/widgets/favorites/favorite_list.dart';
+import 'package:neoeats/features/ui/widgets/favorites/order_history_card.dart';
+
 
 class FavoritesPage extends StatelessWidget {
   const FavoritesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final List<FlSpot> weekdaySpots = [
+      FlSpot(0, 5), FlSpot(1, 7), FlSpot(2, 3), FlSpot(3, 8), 
+      FlSpot(4, 6), FlSpot(5, 0), FlSpot(6, 0)
+    ];
+    
+    final List<FlSpot> weekendSpots = [
+      FlSpot(0, 0), FlSpot(1, 0), FlSpot(2, 0), FlSpot(3, 0), 
+      FlSpot(4, 0), FlSpot(5, 9), FlSpot(6, 7)
+    ];
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        title: const Text(
-          'Meus Favoritos',
-          style: TextStyle(
-            color: AppColors.red,
-            fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Meus Favoritos',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.orange,
+                ),
+              ),
+              const SizedBox(height: 16),
+              const SearchBar(),
+              const SizedBox(height: 24),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: FavoritesList(),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: OrderHistoryCard(
+                        weekdaySpots: weekdaySpots,
+                        weekendSpots: weekendSpots,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Buscar nos favoritos',
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25),
-                  borderSide: const BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25),
-                  borderSide: const BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                filled: true,
-                fillColor: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              'Pratos Favoritos',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: AppColors.red,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: ListView(
-                children: const [
-                  FavoriteCard(),
-                  SizedBox(height: 12),
-                  FavoriteCard(),
-                  SizedBox(height: 12),
-                  FavoriteCard(),
-                ],
-              ),
-            ),
-          ],
         ),
       ),
     );
   }
 }
+
+
+class SearchBar extends StatelessWidget {
+  const SearchBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      decoration: InputDecoration(
+        hintText: 'Buscar favoritos',
+        prefixIcon: const Icon(Icons.search, color: Colors.grey),
+        filled: true,
+        fillColor: Colors.grey[100],
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide.none,
+        ),
+        contentPadding: const EdgeInsets.symmetric(vertical: 0),
+      ),
+    );
+  }
+}
+
+
 

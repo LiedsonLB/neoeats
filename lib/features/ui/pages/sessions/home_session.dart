@@ -26,22 +26,24 @@ class _HomeSessionState extends State<HomeSession> {
                   child: TextField(
                     decoration: InputDecoration(
                       hintText: 'O que vai pedir hoje ?',
-                      prefixIcon: const Icon(Icons.search),
+                      hintStyle: const TextStyle(
+                        color: AppColors.black, 
+                        fontSize: 16, 
+                      ),
+                      prefixIcon: const Icon(Icons.search, color: AppColors.black),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(25),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(25),
                         borderSide: const BorderSide(
-                          color: Colors
-                              .transparent, 
+                          color: Colors.transparent,
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(25),
                         borderSide: const BorderSide(
-                          color: Colors
-                              .transparent, 
+                          color: Colors.transparent,
                         ),
                       ),
                       contentPadding: const EdgeInsets.symmetric(vertical: 10),
@@ -53,11 +55,11 @@ class _HomeSessionState extends State<HomeSession> {
                 const SizedBox(width: 8),
                 Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white),
                     borderRadius: BorderRadius.circular(25),
+                    color: Colors.white,
                   ),
                   child: IconButton(
-                    icon: const Icon(Icons.tune),
+                    icon: const Icon(Icons.tune_outlined, color: AppColors.black),
                     onPressed: () {},
                   ),
                 ),
@@ -76,13 +78,13 @@ class _HomeSessionState extends State<HomeSession> {
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
             const Text(
               'Pratos Recomendados',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
-                color: AppColors.red,
+                color: AppColors.orange,
               ),
             ),
             const SizedBox(height: 16),
@@ -96,13 +98,13 @@ class _HomeSessionState extends State<HomeSession> {
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
             const Text(
               'Todos os pratos',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
-                color: AppColors.red,
+                color: AppColors.orange,
               ),
             ),
             const SizedBox(height: 16),
