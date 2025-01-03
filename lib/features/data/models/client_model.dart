@@ -1,41 +1,38 @@
-class ClientModel {
+class Client {
   final int? id;
-  final String nome;
+  final String name;
   final String email;
-  final String acesso;
-  final String? telefone;
-  final DateTime? dataCadastro;
+  final String access;
+  final String? phone;
+  final String registrationDate;
 
-  ClientModel({
+  Client({
     this.id,
-    required this.nome,
+    required this.name,
     required this.email,
-    required this.acesso,
-    this.telefone,
-    this.dataCadastro,
+    required this.access,
+    this.phone,
+    required this.registrationDate,
   });
+
+  factory Client.fromJson(Map<String, dynamic> json) {
+    return Client(
+      id: json['id'],
+      name: json['name'],
+      email: json['email'],
+      access: json['access'],
+      phone: json['phone'],
+      registrationDate: json['registration_date'],
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'nome': nome,
+      'name': name,
       'email': email,
-      'acesso': acesso,
-      'telefone': telefone,
-      'data_cadastro': dataCadastro?.toIso8601String(),
+      'access': access,
+      'phone': phone,
+      'registration_date': registrationDate,
     };
-  }
-
-  factory ClientModel.fromJson(Map<String, dynamic> map) {
-    return ClientModel(
-      id: map['id'],
-      nome: map['nome'] ?? '',
-      email: map['email'] ?? '',
-      acesso: map['acesso'] ?? '',
-      telefone: map['telefone'],
-      dataCadastro: map['data_cadastro'] != null
-          ? DateTime.parse(map['data_cadastro'])
-          : null,
-    );
   }
 }

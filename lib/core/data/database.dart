@@ -16,90 +16,90 @@ class DatabaseService {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
-    return await openDatabase(
+    var db = await openDatabase(
       path,
       version: 1,
       onCreate: _createDB,
-      onOpen: (db) async {
-        await db.execute('PRAGMA foreign_keys = ON;');
-      },
     );
+
+    await db.execute('PRAGMA foreign_keys = ON;');
+    return db;
   }
 
   Future _createDB(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE Cliente (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome TEXT NOT NULL,
-        email TEXT NOT NULL,
-        acesso TEXT CHECK(acesso IN ('cliente', 'gerente')) NOT NULL,
-        telefone TEXT,
-        data_cadastro TEXT NOT NULL
-      );
+    CREATE TABLE Client (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      email TEXT NOT NULL,
+      access TEXT CHECK(access IN ('client', 'manager')) NOT NULL,
+      phone TEXT,
+      registration_date TEXT NOT NULL
+    );
 
-      CREATE TABLE Mesa (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        capacidade INTEGER NOT NULL,
-        status TEXT CHECK(status IN ('livre', 'ocupada')) NOT NULL
-      );
+    CREATE TABLE RestaurantTable (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      capacity INTEGER NOT NULL,
+      status TEXT CHECK(status IN ('free', 'occupied')) NOT NULL
+    );
 
-      CREATE TABLE Categoria (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome TEXT NOT NULL UNIQUE
-      );
+    CREATE TABLE Category (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL UNIQUE
+    );
 
-      CREATE TABLE Prato (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome TEXT NOT NULL,
-        imagem TEXT,
-        descricao TEXT,
-        preco REAL NOT NULL,
-        id_categoria INTEGER NOT NULL,
-        status TEXT CHECK(status IN ('ativo', 'inativo')) NOT NULL,
+    CREATE TABLE Dish (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      image TEXT,
+      description TEXT,
+      price REAL NOT NULL,
+      status TEXT CHECK(status IN ('active', 'inactive')) NOT NULL
+    );
 
-        FOREIGN KEY (id_categoria) REFERENCES Categoria (id)
-      );
+    CREATE TABLE DishCategory (
+      dish_id INTEGER NOT NULL,
+      category_id INTEGER NOT NULL,
+      PRIMARY KEY (dish_id, category_id),
+      FOREIGN KEY (dish_id) REFERENCES Dish(id) ON DELETE CASCADE,
+      FOREIGN KEY (category_id) REFERENCES Category(id)
+    );
 
-      CREATE TABLE Favorito (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        id_cliente INTEGER NOT NULL,
-        id_prato INTEGER NOT NULL,
+    CREATE TABLE Favorite (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      client_id INTEGER NOT NULL,
+      dish_id INTEGER NOT NULL,
+      FOREIGN KEY (client_id) REFERENCES Client(id),
+      FOREIGN KEY (dish_id) REFERENCES Dish(id)
+    );
 
-        FOREIGN KEY (id_cliente) REFERENCES Clientes (id),
-        FOREIGN KEY (id_prato) REFERENCES Prato (id)
-      );
+    CREATE TABLE OrderDish (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      table_id INTEGER NOT NULL,
+      order_date TEXT NOT NULL,
+      status TEXT CHECK(status IN ('open', 'closed')) NOT NULL,
+      FOREIGN KEY (table_id) REFERENCES RestaurantTable(id)
+    );
 
-      CREATE TABLE Pedido (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        id_mesa INTEGER NOT NULL,
-        data_pedido TEXT NOT NULL,
-        status TEXT CHECK(status IN ('aberto', 'fechado')) NOT NULL,
+    CREATE TABLE OrderItem (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      order_id INTEGER NOT NULL,
+      dish_id INTEGER NOT NULL,
+      quantity INTEGER NOT NULL,
+      unit_price REAL NOT NULL,
+      FOREIGN KEY (order_id) REFERENCES OrderDish(id),
+      FOREIGN KEY (dish_id) REFERENCES Dish(id)
+    );
 
-        FOREIGN KEY (id_mesa) REFERENCES Mesa (id)
-      );
-
-      CREATE TABLE PedidoPrato (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        id_pedido INTEGER NOT NULL,
-        id_prato INTEGER NOT NULL,
-        quantidade INTEGER NOT NULL,
-        preco_unitario REAL NOT NULL,
-
-        FOREIGN KEY (id_pedido) REFERENCES Pedido (id),
-        FOREIGN KEY (id_prato) REFERENCES Prato (id)
-      );
-
-      CREATE TABLE Pagamento (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        id_pedido INTEGER NOT NULL,
-        valor REAL NOT NULL,
-        data_pagamento TEXT NOT NULL,
-        tipo_pagamento TEXT CHECK(tipo_pagamento IN ('dinheiro', 'cartao', 'pix')) NOT NULL,
-
-        FOREIGN KEY (id_pedido) REFERENCES Pedido (id)
-      );
-
-    ''');
+    CREATE TABLE Payment (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      order_id INTEGER NOT NULL,
+      amount REAL NOT NULL,
+      payment_date TEXT NOT NULL,
+      payment_type TEXT CHECK(payment_type IN ('cash', 'card', 'pix')) NOT NULL,
+      FOREIGN KEY (order_id) REFERENCES OrderDish(id)
+    );
+  ''');
   }
 
   Future<List<Map<String, dynamic>>> query(String table) async {

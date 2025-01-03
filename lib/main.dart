@@ -18,8 +18,6 @@ void main() {
 class NeoEatsApp extends ConsumerWidget {
   const NeoEatsApp({super.key});
 
-  const NeoEatsApp({super.key});
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const MaterialApp(

@@ -1,4 +1,5 @@
 import 'package:neoeats/core/data/database.dart';
+import 'package:neoeats/core/errors/category_delete_failure.dart';
 import 'package:neoeats/core/errors/category_fetch_failure.dart';
 import 'package:neoeats/core/errors/category_save_failure.dart';
 import 'package:neoeats/features/data/models/category_model.dart';
@@ -6,41 +7,51 @@ import 'package:neoeats/features/data/models/category_model.dart';
 class CategoryService {
   DatabaseService db = DatabaseService.instance;
 
-  Future<List<CategoryModel>> fetchCategories() async {
+  Future<List<Category>> fetchCategories() async {
     List<Map<String, dynamic>> results = [];
     try {
-      results = await db.query('Categoria');
+      results = await db.query('Category');
     } catch (e) {
-      CategoryFetchFailure('Categories not found');
+      throw CategoryFetchFailure('Categories not found');
     }
-    return results.map((map) => CategoryModel.fromJson(map)).toList();
+    return results.map((map) => Category.fromJson(map)).toList();
   }
 
-  Future<CategoryModel> fetchCategory(String email) async {
+  Future<Category> fetchCategory(String name) async {
     List<Map<String, dynamic>> results = [];
+    List<Map<String, dynamic>> resultsByName = [];
     try {
-      results = await db.query('Categoryes');
+      results = await db.query('Category');
+      resultsByName =
+          results.where((element) => element['name'] == name).toList();
+      if (resultsByName.isEmpty) {
+        throw CategoryFetchFailure('Category not found');
+      }
     } catch (e) {
-      CategoryFetchFailure('Category not found');
+      throw CategoryFetchFailure('Error fetching category');
     }
-    return results.map((map) => CategoryModel.fromJson(map)).first;
+    return Category.fromJson(resultsByName.first);
   }
 
-  Future<CategoryModel> saveCategory(CategoryModel category) async {
+  Future<Category> saveCategory(Category category) async {
     final Map<String, dynamic> data = category.toJson();
     try {
-      await db.insert('Categoria', data);
+      await db.insert('Category', data);
     } catch (e) {
-      CategorySaveFailure('Error saving Category');
+      throw CategorySaveFailure('Error saving category');
     }
     return category;
   }
 
   Future<void> deleteCategory(String name) async {
-    await db.delete(
-      'Categoria',
-      where: 'nome = ?',
+    final result = await db.delete(
+      'Category',
+      where: 'name = ?',
       whereArgs: [name],
     );
+
+    if (result == 0) {
+      throw CategoryDeleteFailure('Error deleting category');
+    }
   }
 }

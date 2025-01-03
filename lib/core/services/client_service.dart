@@ -2,51 +2,68 @@ import 'package:neoeats/core/data/database.dart';
 import 'package:neoeats/core/errors/client_invalid_failure.dart';
 import 'package:neoeats/features/data/models/client_model.dart';
 
-class ClienteService {
+class ClientService {
   DatabaseService db = DatabaseService.instance;
 
-  Future<List<ClientModel>> fetchClients() async {
+  Future<List<Client>> fetchClients() async {
     List<Map<String, dynamic>> results = [];
     try {
-      results = await db.query('Cliente');
+      results = await db.query('Client');
     } catch (e) {
-      ClientInvalidFailure('Clients not found');
+      throw ClientInvalidFailure('Clients not found');
     }
-    return results.map((map) => ClientModel.fromJson(map)).toList();
+    return results.map((map) => Client.fromJson(map)).toList();
   }
 
-  Future<ClientModel> fetchClient(String email) async {
+  Future<Client> fetchClient(String email) async {
     List<Map<String, dynamic>> results = [];
+    List<Map<String, dynamic>> resultsByEmail = [];
     try {
-      results = await db.query('Cliente');
+      results = await db.query('Client');
+      resultsByEmail = results.where((element) => element['email'] == email).toList();
+      if (resultsByEmail.isEmpty) {
+        throw ClientInvalidFailure('Client not found');
+      }
     } catch (e) {
-      ClientInvalidFailure('Client not found');
+      throw ClientInvalidFailure('Error fetching client');
     }
-    return results.map((map) => ClientModel.fromJson(map)).first;
+    return Client.fromJson(resultsByEmail.first);
   }
 
-  Future<List<ClientModel>> saveClient(ClientModel client) async {
+  Future<List<Client>> saveClient(Client client) async {
     final Map<String, dynamic> data = client.toJson();
-    await db.insert('Cliente', data);
+    try {
+      await db.insert('Client', data);
+    } catch (e) {
+      throw ClientInvalidFailure('Error saving client');
+    }
     return fetchClients();
   }
 
-  Future<void> updateClient(ClientModel client, String email) async {
-    await db.update(
-      'Cliente',
-      {
-        'email': email,
-      },
-      where: 'email = ?',
-      whereArgs: [client.email],
-    );
+  Future<void> updateClient(Client client, String newEmail) async {
+    try {
+      await db.update(
+        'Client',
+        {
+          'email': newEmail,
+        },
+        where: 'email = ?',
+        whereArgs: [client.email],
+      );
+    } catch (e) {
+      throw ClientInvalidFailure('Error updating client');
+    }
   }
 
   Future<void> deleteClient(int id) async {
-    await db.delete(
-      'Cliente',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    try {
+      await db.delete(
+        'Client',
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    } catch (e) {
+      throw ClientInvalidFailure('Error deleting client');
+    }
   }
 }
