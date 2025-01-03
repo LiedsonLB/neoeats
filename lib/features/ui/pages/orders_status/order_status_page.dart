@@ -7,20 +7,18 @@ class OrderStatusPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      backgroundColor: Colors.white,
-      elevation: 0,
-      centerTitle: true, 
-      title: const Text(
-        'Status do Pedido',
-        style: TextStyle(
-          color: AppColors.red,
-          fontWeight: FontWeight.bold,
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        title: const Text(
+          'Status do Pedido',
+          style: TextStyle(
+            color: AppColors.orange,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
-    ),
-    
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -54,6 +52,7 @@ class OrderStatusPage extends StatelessWidget {
                         Text(
                           'Pedido em andamento',
                           style: TextStyle(
+                            color: AppColors.black,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -108,75 +107,71 @@ class OrderStatusPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
-                    spreadRadius: 1,
-                    blurRadius: 5,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12), 
               ),
-              child: Column(
-                children: [
-                  const Row(
-                    children: [
-                      Text(
-                        'Detalhes do pedido',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+              elevation: 4, 
+              child: Padding(
+                padding: const EdgeInsets.all(16), 
+                child: Column(
+                  children: [
+                    const Row(
+                      children: [
+                        Text(
+                          'Detalhes do pedido',
+                          style: TextStyle(
+                            color: AppColors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Spacer(),
-                      Text(
-                        '#12345',
-                        style: TextStyle(
-                          color: Colors.grey,
+                        Spacer(),
+                        Text(
+                          '#12345',
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.asset(
-                          'assets/image/logo.png',
-                          height: 60,
-                          width: 60,
-                          fit: BoxFit.cover,
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.asset(
+                            'assets/image/logo.png',
+                            height: 60,
+                            width: 60,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      const Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Pizza de Parrila',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                        const SizedBox(width: 12),
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Pizza de Parrila',
+                                style: TextStyle(
+                                  color: AppColors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            Text(
-                              '1x R\$ 98.00',
-                              style: TextStyle(
-                                color: Colors.grey,
+                              Text(
+                                '1x R\$ 98.00',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -185,4 +180,3 @@ class OrderStatusPage extends StatelessWidget {
     );
   }
 }
-

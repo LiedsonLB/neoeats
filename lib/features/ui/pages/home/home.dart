@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:neoeats/core/constants/colors.dart';
 import 'package:neoeats/features/ui/pages/sessions/home_session.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,26 +11,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.white,
-        elevation: 0,
-        title: Row(
-          children: [
-            Image.asset('assets/image/logo.png', height: 40),
-            const Spacer(),
-            const Icon(Icons.sunny, color: AppColors.red),
-          ],
-        ),
-      ),
-      body: const HomeSession(),
+    return const Scaffold(
+      body: HomeSession(),
     );
   }
 }
-
-
-
-
-
-
-

@@ -12,34 +12,9 @@ class OrdersSession extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Código do pedido',
-                style: TextStyle(fontSize: 16),
-              ),
-              Row(
-                children: [
-                  const Text(
-                    'Mesa',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(width: 8),
-                  DropdownButton<int>(
-                    value: 5,
-                    items: List.generate(
-                      10,
-                      (index) => DropdownMenuItem(
-                        value: index + 1,
-                        child: Text('${index + 1}'),
-                      ),
-                    ),
-                    onChanged: (value) {},
-                  ),
-                ],
-              ),
-            ],
+          const Text(
+            'Código do pedido',
+            style: TextStyle(fontSize: 16),
           ),
           const Text(
             '#907564',
@@ -50,67 +25,64 @@ class OrdersSession extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           const Expanded(
-            child: Column(
-              children: [
-                OrderItemCard(),
-                OrderItemCard(),
-                OrderItemCard(),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Row(
+            child: SingleChildScrollView(
+              child: Column(
                 children: [
-                  Text(
-                    'Total:',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    'R\$ 98.00',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.red,
-                    ),
-                  ),
+                  OrderItemCard(),
+                  OrderItemCard(),
+                  OrderItemCard(),
                 ],
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.red,
-    
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                onPressed: () {},
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Confirmar',
+                      'Total',
                       style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        fontSize: 14,
+                        color: AppColors.black,
                       ),
                     ),
-                    SizedBox(width: 8),
-                    Icon(
-                      Icons.check,
-                      color: Colors.white,
+                    Text(
+                      'R\$ 98.00',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.red,
+                      ),
                     ),
                   ],
                 ),
-              ),
-            ],
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.red,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 12,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                  ),
+                  onPressed: () {},
+                  icon: const Text(
+                    'Confirmar',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  label: const Icon(Icons.check),
+                ),
+              ],
+            ),
           ),
         ],
       ),

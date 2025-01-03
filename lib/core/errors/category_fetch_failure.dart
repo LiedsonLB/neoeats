@@ -1,4 +1,4 @@
-import 'package:neoeats/core/errors/Failure.dart';
+import 'package:neoeats/core/errors/failure.dart';
 
 class CategoryFetchFailure extends Failure {
   CategoryFetchFailure(super.message);

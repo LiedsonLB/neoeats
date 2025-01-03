@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:neoeats/core/constants/colors.dart';
 
 class DetailsSession extends StatelessWidget {
-  const DetailsSession({super.key});
+  final String foodName;
+  final String foodPrice;
+  final String foodDescription;
+  final String foodImageUrl;
+
+  DetailsSession({
+    super.key,
+    required this.foodName,
+    required this.foodPrice,
+    required this.foodDescription,
+    required this.foodImageUrl,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,36 +26,36 @@ class DetailsSession extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Image.asset(
-                    'assets/image/logo.png',
+                    foodImageUrl,
                     width: double.infinity,
                     height: 200,
                     fit: BoxFit.cover,
                   ),
-                  const Padding(
+                   Padding(
                     padding: EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Pizza de Parrila',
+                          foodName,
                           style: TextStyle(
-                            fontSize: 24,
-                            color: Colors.red,
+                            fontSize: 20,
+                            color: AppColors.red,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         SizedBox(height: 8),
                         Text(
-                          'R\$ 98.00',
+                          foodPrice,
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Colors.red,
                           ),
                         ),
                         SizedBox(height: 16),
                         Text(
-                          'A pizza parrilla é preparada na grelha, o que deixa a massa crocante, macia e com um toque defumado. Coberta com ingredientes frescos, oferece um sabor único e autêntico.',
+                          foodDescription,
                           style: TextStyle(fontSize: 16),
                         ),
                       ],
@@ -55,6 +67,7 @@ class DetailsSession extends StatelessWidget {
           ),
           Container(
             padding: const EdgeInsets.all(16.0),
+            
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -62,9 +75,9 @@ class DetailsSession extends StatelessWidget {
                   children: [
                     IconButton(
                       icon: const Icon(Icons.remove_circle),
-                      iconSize: 32,
+                      iconSize: 36,
                       onPressed: () {},
-                      color: Colors.red,
+                      color: AppColors.red,
                     ),
                     const SizedBox(width: 8),
                     const Text(
@@ -74,9 +87,9 @@ class DetailsSession extends StatelessWidget {
                     const SizedBox(width: 8),
                     IconButton(
                       icon: const Icon(Icons.add_circle),
-                      iconSize: 32,
+                      iconSize: 36,
                       onPressed: () {},
-                      color: Colors.red,
+                      color: AppColors.red,
                     ),
                   ],
                 ),
@@ -84,7 +97,7 @@ class DetailsSession extends StatelessWidget {
                   height: 45, 
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
+                      backgroundColor: AppColors.red,
                       padding: const EdgeInsets.symmetric(horizontal: 24),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25),
