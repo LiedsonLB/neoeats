@@ -7,34 +7,41 @@ class OrderItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      elevation: 4,
+      margin: const EdgeInsets.only(bottom: 12),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(12),
         child: Row(
           children: [
-            Image.asset(
-              'assets/image/logo.png',
-              width: 70,
-              height: 70,
-              fit: BoxFit.cover,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset(
+                'assets/image/logo.png',
+                width: 80,
+                height: 80,
+                fit: BoxFit.cover,
+              ),
             ),
             const SizedBox(width: 16),
             const Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Pizza de Parrila',
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  SizedBox(height: 4),
                   Text(
                     'R\$ 98.00',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       color: AppColors.red,
                       fontWeight: FontWeight.bold,
                     ),
@@ -42,23 +49,32 @@ class OrderItemCard extends StatelessWidget {
                 ],
               ),
             ),
-            Row(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.remove_circle, color: AppColors.red),
-                  iconSize: 30,
-                  onPressed: () {},
-                ),
-                const Text(
-                  '5',
-                  style: TextStyle(fontSize: 16),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.add_circle, color: AppColors.red),
-                  iconSize: 30,
-                  onPressed: () {},
-                ),
-              ],
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(28),
+              ),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.remove_circle, color: AppColors.red),
+                    iconSize: 28,
+                    onPressed: () {},
+                  ),
+                  const Text(
+                    '5',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.add_circle, color: AppColors.red),
+                    iconSize: 28,
+                    onPressed: () {},
+                  ),
+                ],
+              ),
             ),
           ],
         ),

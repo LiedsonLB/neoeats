@@ -9,21 +9,18 @@ class OrdersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.red),
-          onPressed: () => Navigator.pop(context),
-        ),
         title: const Text(
-          'Meus pedidos',
-          style: TextStyle(color: AppColors.red,
-          fontWeight: FontWeight.bold,
+          'Meus Pedidos',
+          style: TextStyle(
+            color: AppColors.orange,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        centerTitle: true,
       ),
       body: const OrdersSession(),
     );
   }
 }
+

@@ -8,12 +8,13 @@ class CustomBottomNavigationBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context).bottomNavigationBarTheme;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 16, ),
       margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.red,
+        color: theme.backgroundColor ?? Colors.red, 
         borderRadius: BorderRadius.circular(30),
       ),
       child: Row(
@@ -22,31 +23,31 @@ class CustomBottomNavigationBar extends ConsumerWidget {
           IconButton(
             icon: const Icon(
               Icons.home,
-              color: Colors.white,
+              color: AppColors.white,
               size: 30,
             ),
             onPressed: () => ref.read(navigationProvider.notifier).setScreen(NavigationScreen.home),
           ),
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.shopping_cart,
-              color: Colors.white,
+              color: AppColors.white,
               size: 30,
             ),
             onPressed: () => ref.read(navigationProvider.notifier).setScreen(NavigationScreen.orders),
           ),
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.favorite,
-              color: Colors.white,
+              color: AppColors.white,
               size: 30,
             ),
             onPressed: () => ref.read(navigationProvider.notifier).setScreen(NavigationScreen.favorites),
           ),
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.assignment,
-              color: Colors.white,
+              color: AppColors.white,
               size: 30,
             ),
             onPressed: () => ref.read(navigationProvider.notifier).setScreen(NavigationScreen.orderStatus),
