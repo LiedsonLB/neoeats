@@ -23,8 +23,6 @@ void main() async {
 class NeoEatsApp extends ConsumerWidget {
   const NeoEatsApp({super.key});
 
-  const NeoEatsApp({super.key});
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDarkMode = ref.watch(themeProvider);
