@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neoeats/core/constants/colors.dart';
+import 'package:neoeats/features/ui/pages/details/details_page.dart';
 
 class FavoriteItem extends StatelessWidget {
   final String name;
@@ -12,7 +13,18 @@ class FavoriteItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const DetailsPage(
+            ),
+          ),
+        );
+      },
+      
+      child: Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.grey[50],
@@ -56,6 +68,7 @@ class FavoriteItem extends StatelessWidget {
             child: const Text('Pedir'),
           ),
         ],
+      ),
       ),
     );
   }

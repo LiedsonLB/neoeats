@@ -1,16 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:neoeats/core/constants/colors.dart';
+import 'package:neoeats/features/ui/pages/details/details_page.dart';
 
 class FoodListCard extends StatelessWidget {
   const FoodListCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const DetailsPage(
+            ),
+          ),
+        );
+      },
+    
+    
+    child: Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12), 
       ),
-      elevation: 4, // Sombra do Card
+      elevation: 4, 
       margin: const EdgeInsets.only(bottom: 8), 
       child: Padding(
         padding: const EdgeInsets.all(12.0), 
@@ -70,6 +83,7 @@ class FoodListCard extends StatelessWidget {
           ],
         ),
       ),
+    ),
     );
   }
 }
