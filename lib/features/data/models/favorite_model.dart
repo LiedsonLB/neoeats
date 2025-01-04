@@ -23,4 +23,12 @@ class Favorite {
       'dish_id': dishId,
     };
   }
+
+  Favorite copyWith({int? id, int? clientId, int? dishId}) {
+    return Favorite(
+      id: id ?? this.id,
+      clientId: clientId ?? this.clientId,
+      dishId: dishId ?? this.dishId,
+    );
+  }
 }
