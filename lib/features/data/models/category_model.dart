@@ -1,20 +1,29 @@
-class CategoryModel {
+class Category {
   final int? id;
-  final String nome;
+  final String name;
 
-  CategoryModel({this.id, required this.nome});
+  Category({
+    this.id,
+    required this.name,
+  });
 
-  factory CategoryModel.fromJson(Map<String, dynamic> json) {
-    return CategoryModel(
+  factory Category.fromJson(Map<String, dynamic> json) {
+    return Category(
       id: json['id'],
-      nome: json['nome'] ?? '',
+      name: json['name'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'nome': nome,
+      'name': name,
     };
+  }
+
+  Category copyWith({int? id, String? name}) {
+    return Category(
+      id: id ?? this.id,
+      name: name ?? this.name,
+    );
   }
 }

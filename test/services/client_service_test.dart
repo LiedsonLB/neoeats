@@ -19,51 +19,51 @@ void main() {
       db = DatabaseService.instance;
       database = await db.database;
 
-      await database.delete('Cliente');
+      await database.delete('Client');
     });
 
     tearDown(() async {
       await db.close();
     });
 
-    ClienteService clienteService = ClienteService();
+    ClientService clientService = ClientService();
 
-    ClientModel cliente = new ClientModel(nome: 'Liedson', email: 'liedson.b9@gmail.com', acesso: 'gerente', dataCadastro: DateTime.now());
+    Client cliente = new Client(name: 'Liedson', email: 'liedson.b9@gmail.com', access: 'client', registrationDate: DateTime.now().toString());
 
     test('Salvar cliente', () async {
-      await clienteService.saveClient(cliente);
+      await clientService.saveClient(cliente);
 
-      List<ClientModel> clientes = await clienteService.fetchClients();
+      List<Client> clientes = await clientService.fetchClients();
 
       expect(clientes.length, 1);
-      expect(clientes.first.nome, cliente.nome);
+      expect(clientes.first.name, cliente.name);
       expect(clientes.first.email, cliente.email);
     });
 
     test('Pega todos os clientes', () async {
-      await clienteService.saveClient(cliente);
+      await clientService.saveClient(cliente);
 
-      List<ClientModel> clientes = await clienteService.fetchClients();
+      List<Client> clientes = await clientService.fetchClients();
 
       expect(clientes.length, 1);
     });
 
     test('Pega cliente por email', () async {
-      await clienteService.saveClient(cliente);
+      await clientService.saveClient(cliente);
 
-      ClientModel clienteFind =  await clienteService.fetchClient(cliente.email);
+      Client clienteFind =  await clientService.fetchClient(cliente.email);
 
-      expect(clienteFind.nome, cliente.nome);
+      expect(clienteFind.name, cliente.name);
       expect(clienteFind.email, cliente.email);
     });
 
     test('Atualizar email do cliente', () async {
-      await clienteService.saveClient(cliente);
+      await clientService.saveClient(cliente);
       String newEmail = 'newEmail@etest.com';
 
-      await clienteService.updateClient(cliente, newEmail);
+      await clientService.updateClient(cliente, newEmail);
 
-      List<ClientModel> clientesAtualizados = await clienteService.fetchClients();
+      List<Client> clientesAtualizados = await clientService.fetchClients();
 
       expect(clientesAtualizados.length, 1);
 
@@ -73,17 +73,17 @@ void main() {
     });
 
     test('Deletar cliente', () async {
-      await clienteService.saveClient(cliente);
+      await clientService.saveClient(cliente);
 
-      List<ClientModel> clientes = await clienteService.fetchClients();
+      List<Client> clientes = await clientService.fetchClients();
 
       expect(clientes.length, 1);
 
-      ClientModel clienteFind =  await clienteService.fetchClient(cliente.email);
+      Client clienteFind =  await clientService.fetchClient(cliente.email);
 
-      await clienteService.deleteClient(clienteFind.id!);
+      await clientService.deleteClient(clienteFind.id!);
 
-      final clientesDeleted = await database.query('Cliente');
+      final clientesDeleted = await database.query('Client');
 
       expect(clientesDeleted.length, 0);
     });

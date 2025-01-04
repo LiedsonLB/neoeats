@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:neoeats/core/data/database.dart';
+import 'package:neoeats/core/errors/category_delete_failure.dart';
+import 'package:neoeats/core/errors/category_save_failure.dart';
 import 'package:neoeats/core/services/category_service.dart';
 import 'package:neoeats/features/data/models/category_model.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -20,7 +22,7 @@ void main()  {
       db = DatabaseService.instance;
       database = await db.database;
 
-      await database.delete('Categoria');
+      await database.delete('Category');
     });
 
     tearDown(() async {
@@ -28,53 +30,68 @@ void main()  {
     });
 
     CategoryService categoryService = CategoryService();
-    CategoryModel category = new CategoryModel(nome: 'Bebidas');
+    Category category = new Category(name: 'Bebidas');
 
     test('Pegar todas as categorias', () async {
-      CategoryModel categorySaved = await categoryService.saveCategory(category);
+      Category categorySaved = await categoryService.saveCategory(category);
 
-      List<CategoryModel> results = await categoryService.fetchCategories();
+      List<Category> results = await categoryService.fetchCategories();
 
-      print(categorySaved.nome);
+      print(categorySaved.name);
 
       expect(results.length, 1);
-      expect(results.first.nome, 'Bebidas');
+      expect(results.first.name, 'Bebidas');
     });
 
     test('Salvar categoria', () async {
       await categoryService.saveCategory(category);
-      await categoryService.saveCategory(new CategoryModel(nome: 'Sobremesas'));
-      await categoryService.saveCategory(new CategoryModel(nome: 'Pratos')); 
+      await categoryService.saveCategory(new Category(name: 'Sobremesas'));
+      await categoryService.saveCategory(new Category(name: 'Pratos')); 
 
-      List<CategoryModel> results = await categoryService.fetchCategories();
+      List<Category> results = await categoryService.fetchCategories();
 
       print(results.length);
 
       expect(results.length, 3);
-      expect(results.first.nome, 'Bebidas');
+      expect(results.first.name, 'Bebidas');
     });
 
     test('Salvar categoria com nome repetido', () async {
       await categoryService.saveCategory(category);
-      await categoryService.saveCategory(category);
 
-      List<CategoryModel> results = await categoryService.fetchCategories();
+      expect(() async => await categoryService.saveCategory(category), throwsA(isA<CategorySaveFailure>()));
+
+      List<Category> results = await categoryService.fetchCategories();
 
       expect(results.length, 1);
     });
 
     test('Deletar categoria', () async {
-      CategoryModel categorySaved = await categoryService.saveCategory(category);
+      Category categorySaved = await categoryService.saveCategory(category);
 
-      List<CategoryModel> results = await categoryService.fetchCategories();
+      List<Category> results = await categoryService.fetchCategories();
 
       expect(results.length, 1);
 
-      await categoryService.deleteCategory(categorySaved.nome);
+      await categoryService.deleteCategory(categorySaved.name);
 
-      List<CategoryModel> resultsAfterDelete = await categoryService.fetchCategories();
+      List<Category> resultsAfterDelete = await categoryService.fetchCategories();
 
       expect(resultsAfterDelete.length, 0);
+    });
+
+    test('Deletar categoria com nome inexistente', () async {
+      await categoryService.saveCategory(category);
+
+      List<Category> results = await categoryService.fetchCategories();
+
+      expect(results.length, 1);
+
+      expect(() async => await categoryService.deleteCategory('Pratos'), throwsA(isA<CategoryDeleteFailure>()));
+
+      List<Category> resultsAfterDelete = await categoryService.fetchCategories();
+
+      expect(resultsAfterDelete.length, 1);
     });
   });
 }

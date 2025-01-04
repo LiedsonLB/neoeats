@@ -1,39 +1,34 @@
-class PaymentModel {
+class Payment {
   final int? id;
-  final int pedidoId;
-  final double valorTotal;
-  final String status;
-  final String? dataPagamento;
-  final String metodoPagamento;
+  final int orderId;
+  final double amount;
+  final String paymentDate;
+  final String paymentType;
 
-  PaymentModel({
+  Payment({
     this.id,
-    required this.pedidoId,
-    required this.valorTotal,
-    required this.status,
-    this.dataPagamento,
-    required this.metodoPagamento,
+    required this.orderId,
+    required this.amount,
+    required this.paymentDate,
+    required this.paymentType,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'pedido_id': pedidoId,
-      'valor_total': valorTotal,
-      'status': status,
-      'data_pagamento': dataPagamento,
-      'metodo_pagamento': metodoPagamento,
-    };
+  factory Payment.fromJson(Map<String, dynamic> json) {
+    return Payment(
+      id: json['id'],
+      orderId: json['order_id'],
+      amount: json['amount'],
+      paymentDate: json['payment_date'],
+      paymentType: json['payment_type'],
+    );
   }
 
-  factory PaymentModel.fromMap(Map<String, dynamic> map) {
-    return PaymentModel(
-      id: map['id'],
-      pedidoId: map['pedido_id'],
-      valorTotal: map['valor_total'],
-      status: map['status'],
-      dataPagamento: map['data_pagamento'],
-      metodoPagamento: map['metodo_pagamento'],
-    );
+  Map<String, dynamic> toJson() {
+    return {
+      'order_id': orderId,
+      'amount': amount,
+      'payment_date': paymentDate,
+      'payment_type': paymentType,
+    };
   }
 }

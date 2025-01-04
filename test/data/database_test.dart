@@ -16,8 +16,6 @@ void main() {
       databaseFactory = databaseFactoryFfi;
       db = DatabaseService.instance;
       database = await db.database;
-
-      await database.delete('Cliente');
     });
 
     tearDown(() async {
