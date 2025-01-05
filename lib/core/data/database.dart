@@ -122,7 +122,6 @@ class DatabaseService {
       );
     ''');
 
-    // Inserção de dados mock
     for (var category in MockData.categories) {
       await db.insert(
         'Category',
@@ -132,15 +131,25 @@ class DatabaseService {
     }
 
     for (var dish in MockData.dishes) {
-      await db.insert(
+      int dishId = await db.insert(
         'Dish',
         dish.toJsonWithId(),
         conflictAlgorithm: ConflictAlgorithm.ignore,
       );
+
+      for (var category in dish.categories) {
+        await db.insert(
+          'DishCategory',
+          {
+            'dish_id': dishId,
+            'category_id': category.id,
+          },
+          conflictAlgorithm: ConflictAlgorithm.ignore,
+        );
+      }
     }
   }
 
-  // Consulta genérica
   Future<List<Map<String, dynamic>>> query(
     String table, {
     List<String>? columns,

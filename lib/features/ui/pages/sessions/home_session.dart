@@ -111,7 +111,7 @@ class _HomeSessionState extends State<HomeSession> {
             ),
             const SizedBox(height: 16),
             SizedBox(
-              height: 200,
+              height: 230,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: const [
@@ -141,8 +141,7 @@ class _HomeSessionState extends State<HomeSession> {
                     final dishes = state.dishes;
                     return Column(
                       children: dishes.map((dish) {
-                        return FoodListCard(
-                            dish: dish); // Exibe os pratos um abaixo do outro
+                        return FoodListCard(dish: dish);
                       }).toList(),
                     );
                   } else {

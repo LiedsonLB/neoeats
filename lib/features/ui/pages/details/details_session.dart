@@ -32,7 +32,7 @@ class DetailsSession extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                   Padding(
-                    padding: EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -58,6 +58,15 @@ class DetailsSession extends StatelessWidget {
                           foodDescription,
                           style: const TextStyle(fontSize: 16),
                         ),
+                        const SizedBox(height: 16),
+                        const Text(
+                          'Categorias:',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
                       ],
                     ),
                   ),

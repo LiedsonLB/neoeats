@@ -1,7 +1,8 @@
-import 'package:neoeats/features/data/models/dish_model.dart';
+import 'package:neoeats/features/data/models/favorite_model.dart';
 
 abstract class FavoriteRepository {
-  Future<void> addFavoriteDish(Dish dish);
-  Future<void> removeFavoriteDish(Dish dish);
-  Future<List<Dish>> getFavoriteDishes();
+  Future<Favorite> saveFavorite(Favorite favorite);
+  Future<Favorite> fetchFavoriteById(int id);
+  Future<void> removeFavorite(int clientId, int dishId);
+  Future<bool> isFavorite(int clientId, int dishId);
 }

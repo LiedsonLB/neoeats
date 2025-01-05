@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:neoeats/core/constants/colors.dart';
 
-
 const String themeBox = 'theme_box';
 const String themeKey = 'is_dark_mode';
 
@@ -24,11 +23,9 @@ class ThemeNotifier extends StateNotifier<bool> {
   }
 }
 
-
 final themeProvider = StateNotifierProvider<ThemeNotifier, bool>((ref) {
   return ThemeNotifier();
 });
-
 
 class AppTheme {
   static ThemeData get lightTheme {
@@ -64,7 +61,7 @@ class AppTheme {
           borderSide: BorderSide.none,
         ),
       ),
-       cardTheme: const CardTheme(
+      cardTheme: const CardTheme(
         color: Colors.white,
         shadowColor: Colors.black26,
       ),
@@ -76,7 +73,7 @@ class AppTheme {
     return ThemeData(
       brightness: Brightness.dark,
       primaryColor: AppColors.orange,
-      scaffoldBackgroundColor: const Color(0xFF2C2C2E),
+      scaffoldBackgroundColor: const Color.fromRGBO(34, 34, 34, 1.0),
       appBarTheme: const AppBarTheme(
         backgroundColor: Color(0xFF2D2D2D),
         iconTheme: IconThemeData(color: Color(0xFFF55432)),
@@ -105,16 +102,14 @@ class AppTheme {
           borderSide: BorderSide.none,
         ),
       ),
-       cardTheme: CardTheme(
+      cardTheme: CardTheme(
         color: Colors.red.shade50,
-        elevation: 2,     
+        elevation: 2,
       ),
-      cardColor:Colors.red.shade50,
+      cardColor: Colors.red.shade50,
     );
   }
 }
-
-
 
 Future<void> initHive() async {
   await Hive.initFlutter();

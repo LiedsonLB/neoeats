@@ -51,7 +51,7 @@ class FavoritesPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
+                    const Expanded(
                       child: FavoritesList(),
                     ),
                     const SizedBox(width: 16),
