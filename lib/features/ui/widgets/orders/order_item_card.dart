@@ -33,6 +33,7 @@ class OrderItemCard extends StatelessWidget {
                   Text(
                     'Pizza de Parrila',
                     style: TextStyle(
+                      color: AppColors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -64,6 +65,7 @@ class OrderItemCard extends StatelessWidget {
                   const Text(
                     '5',
                     style: TextStyle(
+                      color: AppColors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),

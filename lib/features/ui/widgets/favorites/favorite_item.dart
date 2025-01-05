@@ -39,6 +39,7 @@ class FavoriteItem extends StatelessWidget {
                 Text(
                   name,
                   style: const TextStyle(
+                    color: AppColors.black,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
