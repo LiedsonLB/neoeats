@@ -22,7 +22,7 @@ class CategoryButton extends StatelessWidget {
           foregroundColor: isSelected ? Colors.white : Colors.black,
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(100),
             side: BorderSide(
               color: isSelected ? AppColors.red : Colors.grey.shade300,
             ),

@@ -25,38 +25,38 @@ class DetailsSession extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.asset(
+                  Image.network(
                     foodImageUrl,
                     width: double.infinity,
-                    height: 200,
+                    height: 300,
                     fit: BoxFit.cover,
                   ),
-                   Padding(
+                  Padding(
                     padding: EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           foodName,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 20,
                             color: AppColors.red,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
                           foodPrice,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Colors.red,
                           ),
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         Text(
                           foodDescription,
-                          style: TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ],
                     ),
@@ -67,34 +67,44 @@ class DetailsSession extends StatelessWidget {
           ),
           Container(
             padding: const EdgeInsets.all(16.0),
-            
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
+                Column(
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.remove_circle),
-                      iconSize: 36,
-                      onPressed: () {},
-                      color: AppColors.red,
-                    ),
-                    const SizedBox(width: 8),
                     const Text(
-                      '1',
-                      style: TextStyle(fontSize: 20),
+                      'Quantidade',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    const SizedBox(width: 8),
-                    IconButton(
-                      icon: const Icon(Icons.add_circle),
-                      iconSize: 36,
-                      onPressed: () {},
-                      color: AppColors.red,
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.remove_circle),
+                          iconSize: 36,
+                          onPressed: () {},
+                          color: AppColors.red,
+                        ),
+                        const SizedBox(width: 8),
+                        const Text(
+                          '1',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        const SizedBox(width: 8),
+                        IconButton(
+                          icon: const Icon(Icons.add_circle),
+                          iconSize: 36,
+                          onPressed: () {},
+                          color: AppColors.red,
+                        ),
+                      ],
                     ),
                   ],
                 ),
                 SizedBox(
-                  height: 45, 
+                  height: 45,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.red,

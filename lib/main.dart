@@ -25,20 +25,18 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() async {
   if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+    databaseFactory = databaseFactoryFfi;
     sqfliteFfiInit();
   }
-
-  databaseFactory = databaseFactoryFfi;
+  
+  WidgetsFlutterBinding.ensureInitialized();
   await DatabaseService.instance.database;
 
-  WidgetsFlutterBinding.ensureInitialized();
   await initHive();
-  final categoryRepository =
-      CategoryRepositoryImpl(categoryService: CategoryService());
+  final categoryRepository = CategoryRepositoryImpl(categoryService: CategoryService());
   final getCategoriesUseCase = GetCategoriesUseCase(categoryRepository);
   final dishRepository = DishRepositoryImpl(dishService: DishService());
-  final getAllDishesUseCase =
-      GetAllDishesUseCase(dishRepository: dishRepository);
+  final getAllDishesUseCase = GetAllDishesUseCase(dishRepository: dishRepository);
 
   runApp(
     MultiBlocProvider(

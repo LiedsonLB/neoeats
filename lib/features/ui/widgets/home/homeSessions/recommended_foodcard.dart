@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:neoeats/core/constants/colors.dart';
 import 'package:neoeats/core/providers/food_provider.dart';
+import 'package:neoeats/features/data/models/dish_model.dart';
 import 'package:neoeats/features/ui/pages/details/details_page.dart';
 
 class RecommendedFoodCard extends ConsumerWidget {
@@ -11,11 +12,12 @@ class RecommendedFoodCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
-        ref.read(selectedFoodProvider.notifier).state = Food(
+        ref.read(selectedFoodProvider.notifier).state = Dish(
           name: 'Pizza de Parrila',
-          price: 'R\$ 98.00',
+          price: 98.00,
           description: 'A pizza parrilla é preparada na grelha...',
-          imageUrl: 'assets/image/logo.png',
+          image: 'assets/image/logo.png',
+          status: '',
         );
 
         Navigator.push(
@@ -24,7 +26,7 @@ class RecommendedFoodCard extends ConsumerWidget {
         );
       },
       child: Container(
-        width: 160,
+        width: 200,
         margin: const EdgeInsets.only(right: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,17 +68,10 @@ class RecommendedFoodCard extends ConsumerWidget {
                   ),
                 ),
                 const Spacer(),
-                Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: AppColors.red,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(
-                    Icons.shopping_cart,
-                    color: Colors.white,
-                    size: 20,
-                  ),
+                IconButton(
+                  icon: const Icon(Icons.add_circle_outline),
+                  onPressed: () {},
+                  color: AppColors.red,
                 ),
               ],
             ),
