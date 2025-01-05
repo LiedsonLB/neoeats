@@ -4,20 +4,29 @@ import 'package:neoeats/core/constants/colors.dart';
 import 'package:neoeats/features/ui/widgets/favorites/favorite_list.dart';
 import 'package:neoeats/features/ui/widgets/favorites/order_history_card.dart';
 
-
 class FavoritesPage extends StatelessWidget {
   const FavoritesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final List<FlSpot> weekdaySpots = [
-      FlSpot(0, 5), FlSpot(1, 7), FlSpot(2, 3), FlSpot(3, 8), 
-      FlSpot(4, 6), FlSpot(5, 0), FlSpot(6, 0)
+      FlSpot(0, 5),
+      FlSpot(1, 7),
+      FlSpot(2, 3),
+      FlSpot(3, 8),
+      FlSpot(4, 6),
+      FlSpot(5, 0),
+      FlSpot(6, 0)
     ];
-    
+
     final List<FlSpot> weekendSpots = [
-      FlSpot(0, 0), FlSpot(1, 0), FlSpot(2, 0), FlSpot(3, 0), 
-      FlSpot(4, 0), FlSpot(5, 9), FlSpot(6, 7)
+      FlSpot(0, 0),
+      FlSpot(1, 0),
+      FlSpot(2, 0),
+      FlSpot(3, 0),
+      FlSpot(4, 0),
+      FlSpot(5, 9),
+      FlSpot(6, 7)
     ];
 
     return Scaffold(
@@ -63,7 +72,6 @@ class FavoritesPage extends StatelessWidget {
   }
 }
 
-
 class SearchBar extends StatelessWidget {
   const SearchBar({super.key});
 
@@ -72,7 +80,11 @@ class SearchBar extends StatelessWidget {
     return TextField(
       decoration: InputDecoration(
         hintText: 'Buscar favoritos',
-        prefixIcon: const Icon(Icons.search, color: Colors.grey),
+        hintStyle: const TextStyle(
+          color: AppColors.black,
+          fontSize: 16,
+        ),
+        prefixIcon: const Icon(Icons.search, color: AppColors.black),
         filled: true,
         fillColor: Colors.grey[100],
         border: OutlineInputBorder(
@@ -84,6 +96,3 @@ class SearchBar extends StatelessWidget {
     );
   }
 }
-
-
-

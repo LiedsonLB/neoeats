@@ -47,7 +47,7 @@ class OrdersSession extends StatelessWidget {
                       'Total',
                       style: TextStyle(
                         fontSize: 14,
-                        color: AppColors.black,
+
                       ),
                     ),
                     Text(
