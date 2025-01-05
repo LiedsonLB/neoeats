@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:neoeats/core/constants/colors.dart';
+import 'package:neoeats/features/ui/controllers/bloc/category_bloc.dart';
+import 'package:neoeats/features/ui/controllers/state/category_state.dart';
 import 'package:neoeats/features/ui/widgets/home/homeSessions/category_button.dart';
 import 'package:neoeats/features/ui/widgets/home/homeSessions/food_listcard.dart';
 import 'package:neoeats/features/ui/widgets/home/homeSessions/recommended_foodcard.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neoeats/features/ui/controllers/bloc/dish_bloc.dart';
+import 'package:neoeats/features/ui/controllers/state/dish_state.dart';
 
 class HomeSession extends StatefulWidget {
   const HomeSession({super.key});
@@ -27,10 +32,11 @@ class _HomeSessionState extends State<HomeSession> {
                     decoration: InputDecoration(
                       hintText: 'O que vai pedir hoje ?',
                       hintStyle: const TextStyle(
-                        color: AppColors.black, 
-                        fontSize: 16, 
+                        color: AppColors.black,
+                        fontSize: 16,
                       ),
-                      prefixIcon: const Icon(Icons.search, color: AppColors.black),
+                      prefixIcon:
+                          const Icon(Icons.search, color: AppColors.black),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(25),
                       ),
@@ -59,25 +65,41 @@ class _HomeSessionState extends State<HomeSession> {
                     color: Colors.white,
                   ),
                   child: IconButton(
-                    icon: const Icon(Icons.tune_outlined, color: AppColors.black),
+                    icon:
+                        const Icon(Icons.tune_outlined, color: AppColors.black),
                     onPressed: () {},
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 16),
-            SizedBox(
-              height: 35,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: const [
-                  CategoryButton(label: 'TODOS', isSelected: true),
-                  CategoryButton(label: 'CAFÉ', isSelected: false),
-                  CategoryButton(label: 'SOBREMESA', isSelected: false),
-                  CategoryButton(label: 'FAST FOOD', isSelected: false),
-                ],
-              ),
-            ),
+            // BlocBuilder<CategoryBloc, CategoryState>(
+            //   builder: (context, state) {
+            //     if (state is CategoryLoading) {
+            //       return const Center(child: CircularProgressIndicator());
+            //     } else if (state is CategoryError) {
+            //       return Center(child: Text(state.message));
+            //     } else if (state is CategoryLoaded) {
+            //       return ListView.builder(
+            //         scrollDirection: Axis.horizontal,
+            //         itemCount: state.categories.length + 1,
+            //         itemBuilder: (context, index) {
+            //           if (index == 0) {
+            //             return const CategoryButton(
+            //                 label: 'TODOS', isSelected: true);
+            //           }
+            //           final category = state.categories[index - 1];
+            //           return CategoryButton(
+            //             label: category.name.toUpperCase(),
+            //             isSelected: false,
+            //           );
+            //         },
+            //       );
+            //     } else {
+            //       return const Center(child: Text('Nenhuma categoria encontrada.'));
+            //     }
+            //   },
+            // ),
             const SizedBox(height: 20),
             const Text(
               'Pratos Recomendados',
@@ -108,12 +130,27 @@ class _HomeSessionState extends State<HomeSession> {
               ),
             ),
             const SizedBox(height: 16),
-            const Column(
-              children: [
-                FoodListCard(),
-                SizedBox(height: 12),
-                FoodListCard(),
-              ],
+            BlocBuilder<DishBloc, DishState>(
+              builder: (context, state) {
+                if (state is DishLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is DishError) {
+                  return Center(child: Text('Erro: ${state.message}'));
+                } else if (state is DishLoaded) {
+                  final dishes = state.dishes;
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: dishes.length,
+                    itemBuilder: (context, index) {
+                      final dish = dishes[index];
+                      return FoodListCard(dish: dish);
+                    },
+                  );
+                } else {
+                  return const Center(child: Text('Nenhum prato encontrado.'));
+                }
+              },
             ),
           ],
         ),

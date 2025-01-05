@@ -1,21 +1,59 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:neoeats/core/constants/theme/theme.dart';
+import 'package:neoeats/core/data/database.dart';
+import 'package:neoeats/core/services/category_service.dart';
+import 'package:neoeats/core/services/dish_service.dart';
+import 'package:neoeats/features/data/repositories/category_repository_impl.dart';
+import 'package:neoeats/features/data/repositories/dish_repository_impl.dart';
+import 'package:neoeats/features/domain/usecases/category/get_categories_use_case.dart';
+import 'package:neoeats/features/domain/usecases/dish/get_all_dishes_use_case.dart';
+import 'package:neoeats/features/ui/controllers/bloc/category_bloc.dart';
+import 'package:neoeats/features/ui/controllers/bloc/dish_bloc.dart';
+import 'package:neoeats/features/ui/controllers/events/category_event.dart';
+import 'package:neoeats/features/ui/controllers/events/dish_event.dart';
 import 'package:neoeats/features/ui/navigation/navigation_bar.dart';
 import 'package:neoeats/features/ui/navigation/navigation_state.dart';
 import 'package:neoeats/features/ui/pages/home/home.dart';
 import 'package:neoeats/features/ui/pages/orders/orders_page.dart';
 import 'package:neoeats/features/ui/pages/favorites/favorites_page.dart';
 import 'package:neoeats/features/ui/pages/orders_status/order_status_page.dart';
-
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() async {
+  if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+    sqfliteFfiInit();
+  }
+
+  databaseFactory = databaseFactoryFfi;
+  await DatabaseService.instance.database;
+
   WidgetsFlutterBinding.ensureInitialized();
   await initHive();
-  
+  final categoryRepository =
+      CategoryRepositoryImpl(categoryService: CategoryService());
+  final getCategoriesUseCase = GetCategoriesUseCase(categoryRepository);
+  final dishRepository = DishRepositoryImpl(dishService: DishService());
+  final getAllDishesUseCase =
+      GetAllDishesUseCase(dishRepository: dishRepository);
+
   runApp(
-    const ProviderScope(
-      child: NeoEatsApp(),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) =>
+              CategoryBloc(getCategoriesUseCase)..add(FetchCategories()),
+        ),
+        BlocProvider(
+          create: (_) => DishBloc(getAllDishesUseCase)..add(FetchDishes()),
+        ),
+      ],
+      child: const ProviderScope(
+        child: NeoEatsApp(),
+      ),
     ),
   );
 }
@@ -51,7 +89,8 @@ class MainScreen extends ConsumerWidget {
     );
   }
 
-  AppBar? _buildAppBar(BuildContext context, WidgetRef ref, NavigationScreen screen) {
+  AppBar? _buildAppBar(
+      BuildContext context, WidgetRef ref, NavigationScreen screen) {
     if (screen == NavigationScreen.home) {
       return AppBar(
         elevation: 0,
@@ -67,8 +106,8 @@ class MainScreen extends ConsumerWidget {
                   child: Text(
                     'NEOEATS',
                     style: TextStyle(
-                      fontFamily: 'Anton',   
-                      fontSize: 24,                  
+                      fontFamily: 'Anton',
+                      fontSize: 24,
                     ),
                   ),
                 ),

@@ -1,3 +1,4 @@
+import 'package:neoeats/core/data/mocks/categories_mock.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -23,6 +24,23 @@ class DatabaseService {
     );
 
     await db.execute('PRAGMA foreign_keys = ON;');
+
+    for (var category in MockData.categories) {
+      await db.insert(
+        'Category',
+        category.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
+    }
+
+    for (var dish in MockData.dishes) {
+      await db.insert(
+        'Dish',
+        dish.toJsonWithId(),
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
+    }
+
     return db;
   }
 
