@@ -50,8 +50,8 @@ void main() {
 
       final savedFavorite = await favoriteService.saveFavorite(favorite);
 
-      expect(savedFavorite.clientId, favorite.clientId);
-      expect(savedFavorite.dishId, favorite.dishId);
+      expect(clienteFind.id, savedFavorite.clientId);
+      expect(dishFind.id, savedFavorite.dishId);
 
       final results = await database.query('Favorite');
       expect(results.length, 1);
@@ -60,7 +60,17 @@ void main() {
     });
 
     test('Deve excluir um favorito', () async {
-      final favorite = Favorite(clientId: 1, dishId: 101);
+      Client client = Client(name: 'João', email: '', access: 'client', registrationDate: DateTime.now().toString());
+      Dish dish = Dish(name: 'Pizza', price: 10.5, status: 'active', categories: []);
+
+      clientService.saveClient(client);
+      dishService.saveDish(dish);
+
+      Client clienteFind =  await clientService.fetchClient(client.email);
+      Dish dishFind = await dishService.fetchDish(dish.name);
+
+      final favorite = Favorite(clientId: clienteFind.id!, dishId: dishFind.id!);
+
       final savedFavorite = await favoriteService.saveFavorite(favorite);
 
       await favoriteService.removeFavorite(savedFavorite.clientId, savedFavorite.dishId);
@@ -70,24 +80,49 @@ void main() {
     });
 
     test('Deve recuperar um favorito por ID', () async {
-      final favorite = Favorite(clientId: 1, dishId: 101);
+      Client client = Client(name: 'João', email: '', access: 'client', registrationDate: DateTime.now().toString());
+      Dish dish = Dish(name: 'Pizza', price: 10.5, status: 'active', categories: []);
+
+      clientService.saveClient(client);
+      dishService.saveDish(dish);
+
+      Client clienteFind =  await clientService.fetchClient(client.email);
+      Dish dishFind = await dishService.fetchDish(dish.name);
+
+      final favorite = Favorite(clientId: clienteFind.id!, dishId: dishFind.id!);
+
       final savedFavorite = await favoriteService.saveFavorite(favorite);
 
       final retrievedFavorite = await favoriteService.fetchFavoriteById(savedFavorite.id!);
 
-      expect(retrievedFavorite, savedFavorite);
+      expect(retrievedFavorite.id, savedFavorite.id);
+      expect(retrievedFavorite.clientId, savedFavorite.clientId);
+      expect(retrievedFavorite.dishId, savedFavorite.dishId);
     });
 
     test('Deve recuperar todos os favoritos', () async {
-      final favorite1 = Favorite(clientId: 1, dishId: 101);
-      final favorite2 = Favorite(clientId: 2, dishId: 102);
+      Client client1 = Client(name: 'João', email: 'joão@email.com', access: 'client', registrationDate: DateTime.now().toString());
+      Client client2 = Client(name: 'Maria', email: 'maria@email.com', access: 'client', registrationDate: DateTime.now().toString());
+      Dish dish1 = Dish(name: 'Pizza', price: 10.5, status: 'active', categories: []);
+      Dish dish2 = Dish(name: 'Hamburguer', price: 15.5, status: 'active', categories: []);
+
+      clientService.saveClient(client1);
+      clientService.saveClient(client2);
+      dishService.saveDish(dish1);
+      dishService.saveDish(dish2);
+
+      Client clienteFind1 =  await clientService.fetchClient(client1.email);
+      Client clienteFind2 =  await clientService.fetchClient(client2.email);
+      Dish dishFind1 = await dishService.fetchDish(dish1.name);
+      Dish dishFind2 = await dishService.fetchDish(dish2.name);
+
+      final favorite1 = Favorite(clientId: clienteFind1.id!, dishId: dishFind1.id!);
+      final favorite2 = Favorite(clientId: clienteFind2.id!, dishId: dishFind2.id!);
+
       await favoriteService.saveFavorite(favorite1);
       await favoriteService.saveFavorite(favorite2);
 
-      final favorite = Favorite(clientId: 1, dishId: 101);
-      final savedFavorite = await favoriteService.saveFavorite(favorite);
-
-      final retrievedFavorite = await favoriteService.fetchFavoritesByClientId(savedFavorite.clientId);
+      final retrievedFavorite = await favoriteService.fetchFavoritesByClientId(clienteFind1.id!);
 
       retrievedFavorite.forEach((element) {
         print(element.clientId);

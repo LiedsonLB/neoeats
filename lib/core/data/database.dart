@@ -69,15 +69,17 @@ class DatabaseService {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       client_id INTEGER NOT NULL,
       dish_id INTEGER NOT NULL,
-      FOREIGN KEY (client_id) REFERENCES Client(id),
+      FOREIGN KEY (client_id) REFERENCES Client(id) ON DELETE CASCADE,
       FOREIGN KEY (dish_id) REFERENCES Dish(id)
     );
 
     CREATE TABLE OrderDish (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       table_id INTEGER NOT NULL,
+      user_id INTEGER NOT NULL,
       order_date TEXT NOT NULL,
       status TEXT CHECK(status IN ('open', 'closed')) NOT NULL,
+      order_number TEXT NOT NULL,
       FOREIGN KEY (table_id) REFERENCES RestaurantTable(id)
     );
 
@@ -102,9 +104,21 @@ class DatabaseService {
   ''');
   }
 
-  Future<List<Map<String, dynamic>>> query(String table) async {
+  Future<List<Map<String, dynamic>>> query(
+    String table, {
+    List<String>? columns,
+    String? where,
+    List<dynamic>? whereArgs,
+    String? orderBy,
+  }) async {
     final db = await database;
-    return await db.query(table);
+    return await db.query(
+      table,
+      columns: columns,
+      where: where,
+      whereArgs: whereArgs,
+      orderBy: orderBy,
+    );
   }
 
   Future<int> insert(String table, Map<String, dynamic> data) async {

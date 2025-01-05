@@ -15,29 +15,32 @@ class FavoriteService {
   }
 
   Future<List<Favorite>> fetchFavoritesByClientId(int clientId) async {
-    final List<Map<String, dynamic>> results;
-    final List<Map<String, dynamic>> resultsByClientId = [];
     try {
-      results = await db.query('Favorite');
-      resultsByClientId.addAll(
-        results.where((element) => element['client_id'] == clientId),
+      final List<Map<String, dynamic>> results = await db.query(
+        'Favorite',
+        where: 'client_id = ?',
+        whereArgs: [clientId],
       );
+      return results.map((map) => Favorite.fromJson(map)).toList();
     } catch (e) {
       throw Exception('Error fetching favorites: $e');
     }
-    return resultsByClientId.map((map) => Favorite.fromJson(map)).toList();
   }
 
   Future<Favorite> fetchFavoriteById(int id) async {
-    List<Map<String, dynamic>> results = [];
-    List<Map<String, dynamic>> resultsById = [];
     try {
-      results = await db.query('Favorite');
-      resultsById.addAll(results.where((element) => element['id'] == id));
+      final List<Map<String, dynamic>> results = await db.query(
+        'Favorite',
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+      if (results.isEmpty) {
+        throw Exception('Favorite not found');
+      }
+      return Favorite.fromJson(results.first);
     } catch (e) {
       throw Exception('Error fetching favorite: $e');
     }
-    return Favorite.fromJson(resultsById.first);
   }
 
   Future<void> removeFavorite(int clientId, int dishId) async {
@@ -57,16 +60,13 @@ class FavoriteService {
   }
 
   Future<bool> isFavorite(int clientId, int dishId) async {
-    List<Map<String, dynamic>> results = [];
-    List<Map<String, dynamic>> resultsByClientIdAndDishId = [];
     try {
-      results = await db.query('Favorite');
-      resultsByClientIdAndDishId.addAll(
-        results.where(
-          (element) => element['client_id'] == clientId && element['dish_id'] == dishId,
-        ),
+      final List<Map<String, dynamic>> results = await db.query(
+        'Favorite',
+        where: 'client_id = ? AND dish_id = ?',
+        whereArgs: [clientId, dishId],
       );
-      return resultsByClientIdAndDishId.isNotEmpty;
+      return results.isNotEmpty;
     } catch (e) {
       throw Exception('Error checking favorite: $e');
     }

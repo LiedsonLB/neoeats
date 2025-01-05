@@ -9,7 +9,7 @@ import 'package:neoeats/features/data/models/category_model.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main()  {
-  group('category service test', () {
+  group('Category service test', () {
     late DatabaseService db;
     late Database database;
 
@@ -32,7 +32,7 @@ void main()  {
     CategoryService categoryService = CategoryService();
     Category category = new Category(name: 'Bebidas');
 
-    test('Pegar todas as categorias', () async {
+    test('Deve pegar todas as categorias', () async {
       Category categorySaved = await categoryService.saveCategory(category);
 
       List<Category> results = await categoryService.fetchCategories();
@@ -43,7 +43,7 @@ void main()  {
       expect(results.first.name, 'Bebidas');
     });
 
-    test('Salvar categoria', () async {
+    test('Deve salvar categoria', () async {
       await categoryService.saveCategory(category);
       await categoryService.saveCategory(new Category(name: 'Sobremesas'));
       await categoryService.saveCategory(new Category(name: 'Pratos')); 
@@ -56,7 +56,7 @@ void main()  {
       expect(results.first.name, 'Bebidas');
     });
 
-    test('Salvar categoria com nome repetido', () async {
+    test('Deve salvar categoria com nome repetido', () async {
       await categoryService.saveCategory(category);
 
       expect(() async => await categoryService.saveCategory(category), throwsA(isA<CategorySaveFailure>()));
@@ -66,7 +66,7 @@ void main()  {
       expect(results.length, 1);
     });
 
-    test('Deletar categoria', () async {
+    test('Deve deletar categoria', () async {
       Category categorySaved = await categoryService.saveCategory(category);
 
       List<Category> results = await categoryService.fetchCategories();
@@ -80,7 +80,7 @@ void main()  {
       expect(resultsAfterDelete.length, 0);
     });
 
-    test('Deletar categoria com nome inexistente', () async {
+    test('Deve deletar categoria com nome inexistente', () async {
       await categoryService.saveCategory(category);
 
       List<Category> results = await categoryService.fetchCategories();

@@ -22,7 +22,7 @@ void main() {
       await db.close();
     });
 
-    test('iniciar banco de dados', () async {
+    test('Deve iniciar banco de dados', () async {
       expect(database, isA<Database>());
     });
   });

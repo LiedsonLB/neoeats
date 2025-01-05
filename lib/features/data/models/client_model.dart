@@ -35,4 +35,22 @@ class Client {
       'registration_date': registrationDate,
     };
   }
+
+  Client copyWith({
+    int? id,
+    String? name,
+    String? email,
+    String? access,
+    String? phone,
+    String? registrationDate,
+  }) {
+    return Client(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      access: access ?? this.access,
+      phone: phone ?? this.phone,
+      registrationDate: registrationDate ?? this.registrationDate,
+    );
+  }
 }

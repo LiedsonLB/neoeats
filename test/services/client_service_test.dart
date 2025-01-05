@@ -30,7 +30,7 @@ void main() {
 
     Client cliente = new Client(name: 'Liedson', email: 'liedson.b9@gmail.com', access: 'client', registrationDate: DateTime.now().toString());
 
-    test('Salvar cliente', () async {
+    test('Deve salvar cliente', () async {
       await clientService.saveClient(cliente);
 
       List<Client> clientes = await clientService.fetchClients();
@@ -40,7 +40,7 @@ void main() {
       expect(clientes.first.email, cliente.email);
     });
 
-    test('Pega todos os clientes', () async {
+    test('Deve pega todos os clientes', () async {
       await clientService.saveClient(cliente);
 
       List<Client> clientes = await clientService.fetchClients();
@@ -48,7 +48,7 @@ void main() {
       expect(clientes.length, 1);
     });
 
-    test('Pega cliente por email', () async {
+    test('Deve pega cliente por email', () async {
       await clientService.saveClient(cliente);
 
       Client clienteFind =  await clientService.fetchClient(cliente.email);
@@ -57,11 +57,11 @@ void main() {
       expect(clienteFind.email, cliente.email);
     });
 
-    test('Atualizar email do cliente', () async {
+    test('Deve atualizar email do cliente', () async {
       await clientService.saveClient(cliente);
       String newEmail = 'newEmail@etest.com';
 
-      await clientService.updateClient(cliente, newEmail);
+      await clientService.updateEmailClient(cliente, newEmail);
 
       List<Client> clientesAtualizados = await clientService.fetchClients();
 
@@ -72,7 +72,7 @@ void main() {
       }
     });
 
-    test('Deletar cliente', () async {
+    test('Deve deletar cliente', () async {
       await clientService.saveClient(cliente);
 
       List<Client> clientes = await clientService.fetchClients();

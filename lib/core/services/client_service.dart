@@ -6,47 +6,61 @@ class ClientService {
   DatabaseService db = DatabaseService.instance;
 
   Future<List<Client>> fetchClients() async {
-    List<Map<String, dynamic>> results = [];
     try {
-      results = await db.query('Client');
+      final List<Map<String, dynamic>> results = await db.query('Client');
+      return results.map((map) => Client.fromJson(map)).toList();
     } catch (e) {
       throw ClientInvalidFailure('Clients not found');
     }
-    return results.map((map) => Client.fromJson(map)).toList();
   }
 
   Future<Client> fetchClient(String email) async {
-    List<Map<String, dynamic>> results = [];
-    List<Map<String, dynamic>> resultsByEmail = [];
     try {
-      results = await db.query('Client');
-      resultsByEmail = results.where((element) => element['email'] == email).toList();
-      if (resultsByEmail.isEmpty) {
+      final List<Map<String, dynamic>> results = await db.query(
+        'Client',
+        where: 'email = ?',
+        whereArgs: [email],
+      );
+      if (results.isEmpty) {
         throw ClientInvalidFailure('Client not found');
       }
+      return Client.fromJson(results.first);
     } catch (e) {
       throw ClientInvalidFailure('Error fetching client');
     }
-    return Client.fromJson(resultsByEmail.first);
   }
 
-  Future<List<Client>> saveClient(Client client) async {
+  Future<Client> fetchClientById(int id) async {
+    try {
+      final List<Map<String, dynamic>> results = await db.query(
+        'Client',
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+      if (results.isEmpty) {
+        throw ClientInvalidFailure('Client not found');
+      }
+      return Client.fromJson(results.first);
+    } catch (e) {
+      throw ClientInvalidFailure('Error fetching client');
+    }
+  }
+
+  Future<Client> saveClient(Client client) async {
     final Map<String, dynamic> data = client.toJson();
     try {
       await db.insert('Client', data);
     } catch (e) {
       throw ClientInvalidFailure('Error saving client');
     }
-    return fetchClients();
+    return client;
   }
 
-  Future<void> updateClient(Client client, String newEmail) async {
+  Future<void> updateEmailClient(Client client, String newEmail) async {
     try {
       await db.update(
         'Client',
-        {
-          'email': newEmail,
-        },
+        {'email': newEmail},
         where: 'email = ?',
         whereArgs: [client.email],
       );

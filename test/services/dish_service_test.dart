@@ -32,7 +32,7 @@ void main() {
       await database.delete('DishCategory');
     });
 
-    test('Salvar Prato', () async {
+    test('Deve salvar Prato', () async {
       category = Category(name: 'Massas');
       final categoryId = await db.insert('Category', category.toJson());
       category = category.copyWith(id: categoryId);
@@ -53,7 +53,7 @@ void main() {
       expect(results.length, 1);
     });
 
-    test('Pegar prato por nome', () async {
+    test('Deve pegar o prato por nome', () async {
       category = Category(name: 'Massas');
       final categoryId = await db.insert('Category', category.toJson());
       category = category.copyWith(id: categoryId);
@@ -73,7 +73,7 @@ void main() {
       expect(fetchedDish.price, 10.5);
     });
 
-    test('Deleta um prato', () async {
+    test('Deve deleta um prato', () async {
       category = Category(name: 'Massas');
       final categoryId = await db.insert('Category', category.toJson());
       category = category.copyWith(id: categoryId);
@@ -93,7 +93,7 @@ void main() {
       expect(results.length, 0);
     });
 
-    test('Pega mensagem de falha após tentar deletar prato que não existe',
+    test('Deve pega mensagem de falha após tentar deletar prato que não existe',
         () async {
       expect(() async => await dishService.deleteDish('Non-existent Dish'),
           throwsA(isA<DishDeleteFailure>()));
@@ -150,51 +150,92 @@ void main() {
       expect(resultsForDish[1]['category_id'], category2WithId.id);
     });
 
-    // test('Pegar categoria por prato', () async {
-    //   final category1 = Category(name: 'Categoria 1');
-    //   final category2 = Category(name: 'Categoria 2');
+    test('Deve pegar categoria por prato', () async {
+      final category1 = Category(name: 'Categoria 1');
+      final category2 = Category(name: 'Categoria 2');
 
-    //   final category1Id = await db.insert('Category', category1.toJson());
-    //   final category2Id = await db.insert('Category', category2.toJson());
+      final category1Id = await db.insert('Category', category1.toJson());
+      final category2Id = await db.insert('Category', category2.toJson());
 
-    //   final category1WithId = category1.copyWith(id: category1Id);
-    //   final category2WithId = category2.copyWith(id: category2Id);
+      final category1WithId = category1.copyWith(id: category1Id);
+      final category2WithId = category2.copyWith(id: category2Id);
 
-    //   final dish = Dish(
-    //     name: 'Pizza',
-    //     price: 10.5,
-    //     status: 'active',
-    //     categories: [category1WithId, category2WithId],
-    //   );
+      final dish = Dish(
+        name: 'Pizza',
+        price: 10.5,
+        status: 'active',
+        categories: [category1WithId, category2WithId],
+      );
 
-    //   await dishService.saveDish(dish);
+      await dishService.saveDish(dish);
 
-    //   final savedDishName = await db.query('Dish');
-    //   final savedDishByName = Dish.fromJson(savedDishName.first);
+      final savedDishName = await db.query('Dish');
+      final savedDishByName = Dish.fromJson(savedDishName.first);
 
-    //   expect(savedDishByName.name, dish.name);
-    //   expect(savedDishByName.id, isNotNull);
+      expect(savedDishByName.name, dish.name);
+      expect(savedDishByName.id, isNotNull);
 
-    //   final results = await db.query('DishCategory');
-    //   final existingAssociations = results
-    //       .where((element) =>
-    //           element['dish_id'] == savedDishByName.id &&
-    //           (element['category_id'] == category1WithId.id ||
-    //               element['category_id'] == category2WithId.id))
-    //       .toList();
+      final results = await db.query('DishCategory');
+      final existingAssociations = results
+          .where((element) =>
+              element['dish_id'] == savedDishByName.id &&
+              (element['category_id'] == category1WithId.id ||
+                  element['category_id'] == category2WithId.id))
+          .toList();
 
-    //   if (existingAssociations.isEmpty) {
-    //     await dishService.addCategoriesToDish(savedDishByName.id!, [
-    //       category1WithId.id!,
-    //       category2WithId.id!,
-    //     ]);
-    //   }
+      if (existingAssociations.isEmpty) {
+        await dishService.addCategoriesToDish(savedDishByName.id!, [
+          category1WithId.id!,
+          category2WithId.id!,
+        ]);
+      }
 
-    //   final categories = await dishService.fetchCategoriesForDish(dish);
+      final categories =
+          await dishService.fetchCategoriesForDish(savedDishByName);
 
-    //   expect(categories.length, 2);
-    //   expect(categories[0].name, 'Categoria 1');
-    //   expect(categories[1].name, 'Categoria 2');
-    // });
+      expect(categories.length, 2);
+      expect(categories[0].name, 'Categoria 1');
+      expect(categories[1].name, 'Categoria 2');
+    });
+
+    test('Deve pegar pratos por categoria procurada', () async {
+      final category1 = Category(name: 'Categoria 1');
+      final category2 = Category(name: 'Categoria 2');
+
+      final category1Id = await db.insert('Category', category1.toJson());
+      final category2Id = await db.insert('Category', category2.toJson());
+
+      final category1WithId = category1.copyWith(id: category1Id);
+      final category2WithId = category2.copyWith(id: category2Id);
+
+      final dish1 = Dish(
+        name: 'Pizza',
+        price: 1300.5,
+        status: 'active',
+        categories: [category1WithId],
+      );
+
+      final dish2 = Dish(
+        name: 'Risoto',
+        price: 1345.5,
+        status: 'active',
+        categories: [category1WithId, category2WithId],
+      );
+
+      await dishService.saveDish(dish1);
+      await dishService.saveDish(dish2);
+
+      final dishes =
+          await dishService.fetchDishesByCategoryId(category1WithId.id!);
+
+      expect(dishes.length, 2);
+      expect(dishes[0].name, dish1.name);
+      expect(dishes[1].name, dish2.name);
+
+      print(dishes[0].name);
+      print(dishes[0].price);
+      print(dishes[1].name);
+      print(dishes[1].price);
+    });
   });
 }

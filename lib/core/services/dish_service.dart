@@ -91,7 +91,6 @@ class DishService {
       throw 'Some categories not found';
     }
 
-    // Inserir a associação
     for (var categoryId in categoryIds) {
       await db.insert('DishCategory', {
         'dish_id': dishId,
@@ -102,25 +101,55 @@ class DishService {
 
   Future<List<Category>> fetchCategoriesForDish(Dish dish) async {
     try {
-      final List<Map<String, dynamic>> results;
+      final List<Map<String, dynamic>> results = await db.query(
+        'DishCategory',
+        where: 'dish_id = ?',
+        whereArgs: [dish.id],
+      );
 
-      results = await db.query('DishCategory');
-
-      List<Category> categories = [];
       List<Category> categoriesForDish = [];
-
       for (var row in results) {
         final categoryId = row['category_id'];
-        final categoryMap = await db.query('Category');
+        final categoryMap = await db.query(
+          'Category',
+          where: 'id = ?',
+          whereArgs: [categoryId],
+        );
+
         if (categoryMap.isNotEmpty) {
-          categories.add(Category.fromJson(categoryMap.first));
+          categoriesForDish.add(Category.fromJson(categoryMap.first));
         }
-        categoriesForDish =
-            categories.where((element) => element.id == categoryId).toList();
       }
+
       return categoriesForDish;
     } catch (e) {
       throw DishFetchFailure('Error fetching categories for dish');
+    }
+  }
+
+  Future<List<Dish>> fetchDishesByCategoryId(int categoryId) async {
+    try {
+      final results = await db.query(
+        'DishCategory',
+        where: 'category_id = ?',
+        whereArgs: [categoryId],
+      );
+
+      final dishIds = results.map((row) => row['dish_id'] as int).toList();
+
+      if (dishIds.isEmpty) {
+        return [];
+      }
+
+      final dishMaps = await db.query(
+        'Dish',
+        where: 'id IN (${List.filled(dishIds.length, '?').join(',')})',
+        whereArgs: dishIds,
+      );
+
+      return dishMaps.map((map) => Dish.fromJson(map)).toList();
+    } catch (e) {
+      throw DishFetchFailure('Error fetching dishes by category');
     }
   }
 }
