@@ -1,0 +1,7 @@
+# pegar lista de itens pedidos no meus pedidos
+# pegar lista de favoritos
+# status do pedido (com horario , e adicionar mais status)
+# clicar no "+" e adicionar ao pedido e o TOTAL
+# botão de incrementar e decrementar (update quantity)
+# botao favorito nos detalhes
+# Filtrar por categoria

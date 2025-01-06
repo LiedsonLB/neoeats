@@ -46,7 +46,7 @@ class DetailsSession extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          foodPrice,
+                          "R\$ ${foodPrice}",
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

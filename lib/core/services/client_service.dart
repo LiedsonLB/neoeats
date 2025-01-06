@@ -49,7 +49,8 @@ class ClientService {
   Future<Client> saveClient(Client client) async {
     final Map<String, dynamic> data = client.toJson();
     try {
-      await db.insert('Client', data);
+      int id = await db.insert('Client', data);
+      return client.copyWith(id: id);
     } catch (e) {
       throw ClientInvalidFailure('Error saving client');
     }

@@ -9,8 +9,8 @@ class OrderItemService {
   Future<OrderItem> saveOrderItem(OrderItem orderItem) async {
     final Map<String, dynamic> data = orderItem.toJson();
     try {
-      final orderItemId = await db.insert('OrderItem', data);
-      return orderItem.copyWith(id: orderItemId);
+      final id = await db.insert('OrderItem', data);
+      return orderItem.copyWith(id: id);
     } catch (e) {
       print("Error while saving order item: $e");
       throw OrderItemSaveFailure('Error saving order item');
@@ -34,6 +34,7 @@ class OrderItemService {
       return orderItem;
     }).toList();
   }
+
 
   Future<List<OrderItem>> fetchAllOrderItems() async {
     List<Map<String, dynamic>> results = [];
@@ -79,6 +80,20 @@ class OrderItemService {
       }
     } catch (e) {
       throw OrderItemFetchFailure('Error deleting order item');
+    }
+  }
+
+  Future<OrderItem?> fetchOrderItemById(int id) async {
+    final List<Map<String, dynamic>> maps = await db.query(
+      'OrderItem',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (maps.isNotEmpty) {
+      return OrderItem.fromJson(maps.first);
+    } else {
+      return null;
     }
   }
 }

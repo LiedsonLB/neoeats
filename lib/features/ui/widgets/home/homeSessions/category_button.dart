@@ -4,11 +4,13 @@ import 'package:neoeats/core/constants/colors.dart';
 class CategoryButton extends StatelessWidget {
   final String label;
   final bool isSelected;
+  final VoidCallback onTap;
 
   const CategoryButton({
     super.key,
     required this.label,
     required this.isSelected,
+    required this.onTap,
   });
 
   @override
@@ -16,7 +18,7 @@ class CategoryButton extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(right: 8),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () => onTap(),
         style: ElevatedButton.styleFrom(
           backgroundColor: isSelected ? AppColors.red : Colors.white,
           foregroundColor: isSelected ? Colors.white : Colors.black,

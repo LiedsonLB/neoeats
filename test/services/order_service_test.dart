@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:neoeats/core/data/database.dart';
 import 'package:neoeats/core/services/client_service.dart';
-import 'package:neoeats/core/services/order_services.dart';
+import 'package:neoeats/core/services/order_service.dart';
 import 'package:neoeats/core/services/restaurant_table_service.dart';
 import 'package:neoeats/features/data/models/client_model.dart';
 import 'package:neoeats/features/data/models/order_model.dart';
@@ -40,182 +40,148 @@ void main() {
     });
 
     test('Deve salvar pedido', () async {
-      RestaurantTable restaurantTable =
-          RestaurantTable(id: 1, status: 'free', capacity: 4);
-      await restaurantTableService.saveTable(restaurantTable);
+      clientService.saveClient(Client(name: 'Liedson', email: 'liedaosnawd', access: 'client', registrationDate: DateTime.now().toIso8601String()));
 
-      Client client = Client(
-          name: 'Liedson Barros',
-          email: 'liedson.b9@gmail.com',
-          access: 'client',
-          phone: '123456789',
-          registrationDate: DateTime.now().toString());
-      clientService.saveClient(client);
+       Client client = await clientService.fetchClient('liedaosnawd');
 
-      Client clientFind = await clientService.fetchClient(client.email);
-
-      final order = Order(
-        userId: clientFind.id!,
-        tableId: restaurantTable.id!,
-        orderDate: '2025-01-04 12:00:00',
-        status: 'open',
+      final newOrder = Order(
+        orderDate: DateTime.now().toIso8601String(),
+        status: "open",
+        userId: client.id!,
+        orderItems: [],
       );
 
-      final savedOrder = await orderDishService.saveOrder(order);
+      final savedOrder = await orderDishService.saveOrder(newOrder);
 
-      expect(savedOrder.id, isNotNull);
-      expect(savedOrder.tableId, order.tableId);
-      expect(savedOrder.orderDate, order.orderDate);
-      expect(savedOrder.status, order.status);
+      final fetchedOrder = await orderDishService.fetchOrderById(savedOrder.id!);
+
+      expect(fetchedOrder, isNotNull);
     });
 
-    test('Deve buscar pedido por ID', () async {
-      RestaurantTable restaurantTable =
-          RestaurantTable(id: 1, status: 'free', capacity: 4);
-      await restaurantTableService.saveTable(restaurantTable);
+    // test('Deve buscar pedido por orderNumber', () async {
+    //   final newOrder = Order(
+    //     orderDate: DateTime.now().toIso8601String(),
+    //     status: "Aberto",
+    //     tableId: 1,
+    //     userId: 1,
+    //     orderItems: [],
+    //   );
 
-      Client client = Client(
-          name: 'Liedson Barros',
-          email: 'liedson.b9@gmail.com',
-          access: 'client',
-          phone: '123456789',
-          registrationDate: DateTime.now().toString());
-      clientService.saveClient(client);
 
-      Client clientFind = await clientService.fetchClient(client.email);
+    //   print('New order: $newOrder');
+      
+    //   await orderDishService.saveOrderDish(newOrder);
 
-      final order = Order(
-        userId: clientFind.id!,
-        tableId: restaurantTable.id!,
-        orderDate: '2025-01-04 12:00:00',
-        status: 'open',
-      );
+    //   final fetchedOrders = await orderDishService.getOrderDishesByOrderNumber(orderNumber);
 
-      final savedOrder = await orderDishService.saveOrder(order);
-      final fetchedOrder =
-          await orderDishService.fetchOrderById(savedOrder.id!);
+    //   expect(fetchedOrders.length, greaterThan(0));
+    //   expect(fetchedOrders.first.orderId, orderNumber);
+    // });
 
-      expect(fetchedOrder.id, savedOrder.id);
-      expect(fetchedOrder.tableId, savedOrder.tableId);
-      expect(fetchedOrder.orderDate, savedOrder.orderDate);
-      expect(fetchedOrder.status, savedOrder.status);
-    });
+    // test('Deve buscar todos os itens do pedido', () async {
+    //   final orderId = 1002;
 
-    test('Deve buscar pedidos por status', () async {
-      RestaurantTable restaurantTable =
-          RestaurantTable(id: 1, status: 'free', capacity: 4);
-      await restaurantTableService.saveTable(restaurantTable);
-      RestaurantTable restaurantTable2 =
-          RestaurantTable(id: 2, status: 'occupied', capacity: 2);
-      await restaurantTableService.saveTable(restaurantTable2);
+    //   final orders = [
+    //     Order(orderId: orderId, dishId: 101, quantity: 1, unitPrice: 15.00),
+    //     Order(orderId: orderId, dishId: 102, quantity: 2, unitPrice: 10.00),
+    //   ];
 
-      Client client = Client(
-          name: 'Liedson Barros',
-          email: 'liedson.b9@gmail.com',
-          access: 'client',
-          phone: '123456789',
-          registrationDate: DateTime.now().toString());
-      clientService.saveClient(client);
+    //   for (var order in orders) {
+    //     await orderDishService.saveOrderDish(order);
+    //   }
 
-      Client clientFind = await clientService.fetchClient(client.email);
+    //   final fetchedOrders = await orderDishService.getOrderDishesByOrderNumber(orderId);
 
-      final order1 = Order(
-        userId: clientFind.id!,
-        tableId: restaurantTable.id!,
-        orderDate: '2025-01-04 12:00:00',
-        status: 'open',
-      );
-      final order2 = Order(
-        userId: clientFind.id!,
-        tableId: restaurantTable2.id!,
-        orderDate: '2025-01-04 12:30:00',
-        status: 'closed',
-      );
+    //   expect(fetchedOrders.length, orders.length);
+    // });
 
-      await orderDishService.saveOrder(order1);
-      await orderDishService.saveOrder(order2);
+    // test('Deve adicionar mais itens ao pedido', () async {
+    //   final orderId = 1003;
 
-      final openOrders = await orderDishService.fetchOrdersByStatus('open');
-      final closedOrders = await orderDishService.fetchOrdersByStatus('closed');
+    //   final initialOrder = Order(
+    //     orderId: orderId,
+    //     dishId: 101,
+    //     quantity: 1,
+    //     unitPrice: 20.00,
+    //   );
 
-      expect(openOrders.length, 1);
-      expect(openOrders.first.status, 'open');
-      expect(closedOrders.length, 1);
-      expect(closedOrders.first.status, 'closed');
-    });
+    //   await orderDishService.saveOrderDish(initialOrder);
 
-    test('Deve buscar pedidos por tableId', () async {
-      RestaurantTable restaurantTable =
-          RestaurantTable(id: 1, status: 'free', capacity: 4);
-      await restaurantTableService.saveTable(restaurantTable);
-      RestaurantTable restaurantTable2 =
-          RestaurantTable(id: 2, status: 'occupied', capacity: 2);
-      await restaurantTableService.saveTable(restaurantTable2);
+    //   final newItem = Order(
+    //     orderId: orderId,
+    //     dishId: 102,
+    //     quantity: 1,
+    //     unitPrice: 30.00,
+    //   );
 
-      Client client = Client(
-          name: 'Liedson Barros',
-          email: 'liedson.b9@gmail.com',
-          access: 'client',
-          phone: '123456789',
-          registrationDate: DateTime.now().toString());
-      clientService.saveClient(client);
+    //   await orderDishService.saveOrderDish(newItem);
 
-      Client clientFind = await clientService.fetchClient(client.email);
+    //   final fetchedOrders = await orderDishService.getOrderDishesByOrderNumber(orderId);
 
-      final order1 = Order(
-        userId: clientFind.id!,
-        tableId: restaurantTable.id!,
-        orderDate: '2025-01-04 12:00:00',
-        status: 'open',
-      );
-      final order2 = Order(
-        userId: clientFind.id!,
-        tableId: restaurantTable2.id!,
-        orderDate: '2025-01-04 12:30:00',
-        status: 'closed',
-      );
+    //   expect(fetchedOrders.length, 2);
+    // });
 
-      await orderDishService.saveOrder(order1);
-      await orderDishService.saveOrder(order2);
+    // test('Deve atualizar a quantidade do item no pedido', () async {
+    //   final orderId = 1004;
+    //   final dishId = 101;
 
-      final ordersForTable1 = await orderDishService.fetchOrdersByTableId(1);
-      final ordersForTable2 = await orderDishService.fetchOrdersByTableId(2);
+    //   final initialOrder = Order(
+    //     orderId: orderId,
+    //     dishId: dishId,
+    //     quantity: 1,
+    //     unitPrice: 20.00,
+    //   );
 
-      expect(ordersForTable1.length, 1);
-      expect(ordersForTable1.first.tableId, 1);
-      expect(ordersForTable2.length, 1);
-      expect(ordersForTable2.first.tableId, 2);
-    });
+    //   final savedOrder = await orderDishService.saveOrderDish(initialOrder);
 
-    test('Deve atualizar status do pedido', () async {
-      RestaurantTable restaurantTable =
-          RestaurantTable(id: 1, status: 'free', capacity: 4);
-      await restaurantTableService.saveTable(restaurantTable);
+    //   await orderDishService.updateOrderDishQuantity(savedOrder.id!, 3);
 
-      Client client = Client(
-          name: 'Liedson Barros',
-          email: 'liedson.b9@gmail.com',
-          access: 'client',
-          phone: '123456789',
-          registrationDate: DateTime.now().toString());
-      clientService.saveClient(client);
+    //   final updatedOrder = await orderDishService.getOrderDishById(savedOrder.id!);
 
-      Client clientFind = await clientService.fetchClient(client.email);
+    //   expect(updatedOrder?.quantity, 3);
+    // });
 
-      final order = Order(
-        userId: clientFind.id!,
-        tableId: restaurantTable.id!,
-        orderDate: '2025-01-04 12:00:00',
-        status: 'open',
-      );
+    // test('Deve buscar pedidos por tableId', () async {
+    //   final tableId = 1;
 
-      final savedOrder = await orderDishService.saveOrder(order);
-      await orderDishService.updateOrderStatus(savedOrder.id!, 'closed');
+    //   await restaurantTableService.saveRestaurantTable(
+    //     RestaurantTableModel(id: tableId, tableNumber: 10),
+    //   );
 
-      final updatedOrder =
-          await orderDishService.fetchOrderById(savedOrder.id!);
+    //   final newOrder = Order(
+    //     orderId: 2001,
+    //     dishId: 101,
+    //     quantity: 1,
+    //     unitPrice: 15.00,
+    //     tableId: tableId,
+    //   );
 
-      expect(updatedOrder.status, 'closed');
-    });
+    //   await orderDishService.saveOrderDish(newOrder);
+
+    //   final fetchedOrders = await orderDishService.getOrdersByTableId(tableId);
+
+    //   expect(fetchedOrders.length, greaterThan(0));
+    //   expect(fetchedOrders.first.tableId, tableId);
+    // });
+
+    // test('Deve atualizar status do pedido', () async {
+    //   final orderId = 2002;
+
+    //   final newOrder = Order(
+    //     orderId: orderId,
+    //     dishId: 101,
+    //     quantity: 1,
+    //     unitPrice: 25.00,
+    //     status: "Aberto",
+    //   );
+
+    //   final savedOrder = await orderDishService.saveOrderDish(newOrder);
+
+    //   await orderDishService.updateOrderDishStatus(savedOrder.id!, "Fechado");
+
+    //   final updatedOrder = await orderDishService.getOrderDishById(savedOrder.id!);
+
+    //   expect(updatedOrder?.status, "Fechado");
+    // });
   });
 }

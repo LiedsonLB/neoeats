@@ -7,11 +7,30 @@ class OrderDishService {
   final DatabaseService db = DatabaseService.instance;
 
   Future<Order> saveOrder(Order order) async {
-    final Map<String, dynamic> data = order.toJson();
+    if(order.tableId != null) {
+      final table = await db.query('RestaurantTable', where: 'id = ?', whereArgs: [order.tableId]);
+      if(table.isNotEmpty) {
+        await db.update('RestaurantTable', {'status': 'occupied'}, where: 'id = ?', whereArgs: [order.tableId]);
+      } else{
+        throw OrderSaveFailure('Table not found');
+      }
+    }
+
+    final Map<String, dynamic> data = {
+      'table_id': order.tableId,
+      'user_id': order.userId,
+      'order_date': order.orderDate,
+      'status': order.status,
+      'order_number': order.orderNumber,
+    };
+
     try {
-      print(data);
       final orderId = await db.insert('OrderDish', data);
-      
+
+      for (final item in order.orderItems) {
+        await db.insert('OrderItem', item.copyWith(orderId: orderId).toJson());
+      }
+
       return order.copyWith(id: orderId);
     } catch (e) {
       print("Error while saving order: $e");
@@ -36,16 +55,28 @@ class OrderDishService {
   Future<Order> fetchOrderById(int id) async {
     List<Map<String, dynamic>> results = [];
     try {
-      results = await db.query('OrderDish', where: 'id = ?', whereArgs: [id]);
+      results = await db.query('OrderDish',
+          where: 'id = ?', whereArgs: [id]);
 
       if (results.isEmpty) {
         throw OrderFetchFailure('Order not found');
       }
+
+      final orderItems = await db.query(
+        'OrderItem',
+        where: 'order_id = ?',
+        whereArgs: [results.first['id']],
+      );
+
+      final orderJson = {
+      ...results.first,
+      'order_items': orderItems,
+    };
+    
+    return Order.fromJson(orderJson);
     } catch (e) {
       throw OrderFetchFailure('Error fetching order');
     }
-
-    return Order.fromJson(results.first);
   }
 
   Future<void> updateOrderStatus(int id, String status) async {

@@ -124,5 +124,14 @@ class MockData {
       status: 'active',
       categories: [categories[2]],
     ),
+    Dish(
+      id: 13,
+      name: 'Salsicha Vina',
+      image: 'https://conteudo.imguol.com.br/c/entretenimento/7d/2023/04/04/salsicha-1680621703758_v2_1255x835.jpg',
+      description: '38% sal e 62% sicha',
+      price: 19.99,
+      status: 'active',
+      categories: [categories[3]],
+    ),
   ];
 }

@@ -20,7 +20,6 @@ class _FoodListPageState extends ConsumerState<FoodListPage> {
   @override
   void initState() {
     super.initState();
-    // Disparando o evento para buscar os pratos
     context.read<DishBloc>().add(FetchDishes());
   }
 
@@ -66,6 +65,10 @@ class FoodListCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
+        if(dish.image == null) {
+          dish.image = 'https://as2.ftcdn.net/v2/jpg/02/98/69/09/1000_F_298690986_qYbAKr1wNbUtTqZ2YJGm3C737FoetfSZ.jpg';
+        };
+
         ref.read(selectedFoodProvider.notifier).state = dish;
 
         Navigator.push(
@@ -93,7 +96,7 @@ class FoodListCard extends ConsumerWidget {
                       fit: BoxFit.cover,
                     )
                   : Image.network(
-                      'https://as2.ftcdn.net/v2/jpg/02/98/69/09/1000_F_298690986_qYbAKr1wNbUtTqZ2YJGm3C737FoetfSZ.jpg', // Imagem padrão
+                      'https://as2.ftcdn.net/v2/jpg/02/98/69/09/1000_F_298690986_qYbAKr1wNbUtTqZ2YJGm3C737FoetfSZ.jpg',
                       height: 100,
                       width: 100,
                       fit: BoxFit.cover,

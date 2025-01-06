@@ -1,4 +1,5 @@
-import 'package:neoeats/core/data/mocks/categories_mock.dart';
+import 'package:neoeats/core/data/mocks/dishes_mock.dart';
+import 'package:neoeats/core/data/mocks/tables_mock.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -90,7 +91,7 @@ class DatabaseService {
     await db.execute('''
       CREATE TABLE OrderDish (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        table_id INTEGER NOT NULL,
+        table_id INTEGER,
         user_id INTEGER NOT NULL,
         order_date TEXT NOT NULL,
         status TEXT CHECK(status IN ('open', 'closed')) NOT NULL,
@@ -144,6 +145,14 @@ class DatabaseService {
             'dish_id': dishId,
             'category_id': category.id,
           },
+          conflictAlgorithm: ConflictAlgorithm.ignore,
+        );
+      }
+
+      for (var table in TablesMock.tables) {
+        await db.insert(
+          'RestaurantTable',
+          table.toJson(),
           conflictAlgorithm: ConflictAlgorithm.ignore,
         );
       }

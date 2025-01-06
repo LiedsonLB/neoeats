@@ -17,6 +17,8 @@ class HomeSession extends StatefulWidget {
 }
 
 class _HomeSessionState extends State<HomeSession> {
+  int? selectedGenreIndex;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -90,7 +92,14 @@ class _HomeSessionState extends State<HomeSession> {
                       itemBuilder: (context, index) {
                         final category = categories[index];
                         return CategoryButton(
-                            label: category.name, isSelected: index == 0);
+                          label: category.name,
+                          isSelected: selectedGenreIndex == index,
+                          onTap: () {
+                            setState(() {
+                              selectedGenreIndex = index;
+                            });
+                          },
+                        );
                       },
                     );
                   } else {

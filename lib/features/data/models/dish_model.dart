@@ -3,7 +3,7 @@ import 'package:neoeats/features/data/models/category_model.dart';
 class Dish {
   final int? id;
   final String name;
-  final String? image;
+  String? image;
   final String? description;
   final double price;
   final String status;
