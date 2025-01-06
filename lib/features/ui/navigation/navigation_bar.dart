@@ -29,7 +29,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
             onPressed: () => ref.read(navigationProvider.notifier).setScreen(NavigationScreen.home),
           ),
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.shopping_cart,
               color: AppColors.white,
               size: 30,
@@ -37,7 +37,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
             onPressed: () => ref.read(navigationProvider.notifier).setScreen(NavigationScreen.orders),
           ),
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.favorite,
               color: AppColors.white,
               size: 30,
@@ -45,7 +45,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
             onPressed: () => ref.read(navigationProvider.notifier).setScreen(NavigationScreen.favorites),
           ),
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.assignment,
               color: AppColors.white,
               size: 30,

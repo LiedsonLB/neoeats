@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:neoeats/core/constants/colors.dart';
 import 'package:neoeats/core/providers/food_provider.dart';
+import 'package:neoeats/core/providers/favorite_provider.dart'; 
 import 'package:neoeats/features/ui/pages/details/details_session.dart';
 
 class DetailsPage extends ConsumerWidget {
@@ -10,6 +11,10 @@ class DetailsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedFood = ref.watch(selectedFoodProvider);
+
+    final isFavorite = selectedFood != null
+        ? ref.watch(favoriteProvider.notifier).isFavorite(selectedFood)
+        : false;
 
     return WillPopScope(
       onWillPop: () async {
@@ -38,8 +43,19 @@ class DetailsPage extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: IconButton(
-                icon: const Icon(Icons.favorite_border, color: AppColors.red),
-                onPressed: () {},
+                icon: Icon(
+                  isFavorite ? Icons.favorite : Icons.favorite_border, 
+                  color: AppColors.red,
+                ),
+                onPressed: () {
+                  if (selectedFood != null) {
+                    if (isFavorite) {
+                      ref.read(favoriteProvider.notifier).removeFavorite(selectedFood);
+                    } else {
+                      ref.read(favoriteProvider.notifier).addFavorite(selectedFood);
+                    }
+                  }
+                },
               ),
             ),
           ],
