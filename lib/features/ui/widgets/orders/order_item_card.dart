@@ -1,8 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:neoeats/core/constants/colors.dart';
+import 'package:neoeats/features/data/models/order_item_modal.dart';
 
-class OrderItemCard extends StatelessWidget {
-  const OrderItemCard({super.key});
+class OrderItemCard extends StatefulWidget {
+  final OrderItem orderItem;
+
+  const OrderItemCard({super.key, required this.orderItem});
+
+  @override
+  _OrderItemCardState createState() => _OrderItemCardState();
+}
+
+class _OrderItemCardState extends State<OrderItemCard> {
+  late int quantity;
+
+  @override
+  void initState() {
+    super.initState();
+    quantity = widget.orderItem.quantity;
+  }
+
+  void _increaseQuantity() {
+    setState(() {
+      quantity++;
+    });
+  }
+
+  void _decreaseQuantity() {
+    if (quantity > 1) {
+      setState(() {
+        quantity--;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,30 +48,30 @@ class OrderItemCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                'assets/image/logo.png',
+              child: Image.network(
+                widget.orderItem.image!,
                 width: 80,
                 height: 80,
                 fit: BoxFit.cover,
               ),
             ),
             const SizedBox(width: 16),
-            const Expanded(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Pizza de Parrila',
-                    style: TextStyle(
+                    widget.orderItem.name!,
+                    style: const TextStyle(
                       color: AppColors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
-                    'R\$ 98.00',
-                    style: TextStyle(
+                    'R\$ ${widget.orderItem.unitPrice}',
+                    style: const TextStyle(
                       fontSize: 16,
                       color: AppColors.red,
                       fontWeight: FontWeight.bold,
@@ -60,11 +90,11 @@ class OrderItemCard extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.remove_circle, color: AppColors.red),
                     iconSize: 28,
-                    onPressed: () {},
+                    onPressed: _decreaseQuantity,
                   ),
-                  const Text(
-                    '5',
-                    style: TextStyle(
+                  Text(
+                    '$quantity',
+                    style: const TextStyle(
                       color: AppColors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -73,7 +103,7 @@ class OrderItemCard extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.add_circle, color: AppColors.red),
                     iconSize: 28,
-                    onPressed: () {},
+                    onPressed: _increaseQuantity,
                   ),
                 ],
               ),

@@ -40,6 +40,23 @@ class DishService {
     return Dish.fromJson(resultsByName.first);
   }
 
+  Future<Dish> fetchDishById(int id) async {
+    List<Map<String, dynamic>> results = [];
+    List<Map<String, dynamic>> resultsById = [];
+    try {
+      results = await db.query('Dish');
+      resultsById = results.where((element) => element['id'] == id).toList();
+
+      if (resultsById.isEmpty) {
+        throw DishFetchFailure('Dish not found');
+      }
+    } catch (e) {
+      throw DishFetchFailure('Error fetching dish');
+    }
+
+    return Dish.fromJson(resultsById.first);
+  }
+
   Future<Dish> saveDish(Dish dish) async {
     final Map<String, dynamic> data = dish.toJson();
     try {

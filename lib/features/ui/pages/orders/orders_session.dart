@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neoeats/core/constants/colors.dart';
+import 'package:neoeats/features/ui/controllers/bloc/order_bloc.dart';
+import 'package:neoeats/features/ui/controllers/state/order_state.dart';
 import 'package:neoeats/features/ui/widgets/orders/order_item_card.dart';
 
 class OrdersSession extends StatelessWidget {
@@ -24,39 +27,76 @@ class OrdersSession extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          const Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  OrderItemCard(),
-                  OrderItemCard(),
-                  OrderItemCard(),
-                ],
-              ),
-            ),
+          BlocBuilder<OrderBloc, OrderState>(
+            builder: (context, state) {
+              if (state is OrderLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is OrderError) {
+                return Center(child: Text('Erro: ${state.message}'));
+              } else if (state is OrderLoaded) {
+                final orderItems = state.orders;
+
+                // Calcular o valor total
+                double totalValue = 0.0;
+                for (var orderItem in orderItems) {
+                  totalValue += orderItem.unitPrice * orderItem.quantity;
+                }
+
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: orderItems.length,
+                    itemBuilder: (context, index) {
+                      final orderItem = orderItems[index];
+                      return OrderItemCard(orderItem: orderItem);
+                    },
+                  ),
+                );
+              } else {
+                return const Center(child: Text('Nenhum item no pedido.'));
+              }
+            },
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            padding: const EdgeInsets.symmetric(vertical: 4),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Total',
                       style: TextStyle(
                         fontSize: 14,
-
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
-                      'R\$ 98.00',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.red,
-                      ),
+                    BlocBuilder<OrderBloc, OrderState>(
+                      builder: (context, state) {
+                        if (state is OrderLoaded) {
+                          double totalValue = 0.0;
+                          for (var orderItem in state.orders) {
+                            totalValue += orderItem.unitPrice * orderItem.quantity;
+                          }
+                          return Text(
+                            'R\$ ${totalValue.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.red,
+                            ),
+                          );
+                        } else {
+                          return const Text(
+                            'R\$ 0.00',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.red,
+                            ),
+                          );
+                        }
+                      },
                     ),
                   ],
                 ),
@@ -65,7 +105,7 @@ class OrdersSession extends StatelessWidget {
                     backgroundColor: AppColors.red,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
-                      vertical: 12,
+                      vertical: 20,
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),

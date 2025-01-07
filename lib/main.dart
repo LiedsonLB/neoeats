@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,14 +6,22 @@ import 'package:neoeats/core/constants/theme/theme.dart';
 import 'package:neoeats/core/data/database.dart';
 import 'package:neoeats/core/services/category_service.dart';
 import 'package:neoeats/core/services/dish_service.dart';
+import 'package:neoeats/core/services/order_item_service.dart';
 import 'package:neoeats/features/data/repositories/category_repository_impl.dart';
 import 'package:neoeats/features/data/repositories/dish_repository_impl.dart';
+import 'package:neoeats/features/data/repositories/order_item_repository_impl.dart';
 import 'package:neoeats/features/domain/usecases/category/get_categories_use_case.dart';
 import 'package:neoeats/features/domain/usecases/dish/get_all_dishes_use_case.dart';
+import 'package:neoeats/features/domain/usecases/dish/get_dish_by_id_use_case.dart';
+import 'package:neoeats/features/domain/usecases/order_item/fetch_all_order_items_use_case.dart';
+import 'package:neoeats/features/domain/usecases/order_item/save_order_item_use_case.dart';
+import 'package:neoeats/features/domain/usecases/order_item/update_order-_item_use_case.dart';
 import 'package:neoeats/features/ui/controllers/bloc/category_bloc.dart';
 import 'package:neoeats/features/ui/controllers/bloc/dish_bloc.dart';
+import 'package:neoeats/features/ui/controllers/bloc/order_bloc.dart';
 import 'package:neoeats/features/ui/controllers/events/category_event.dart';
 import 'package:neoeats/features/ui/controllers/events/dish_event.dart';
+import 'package:neoeats/features/ui/controllers/events/order_events.dart';
 import 'package:neoeats/features/ui/navigation/navigation_bar.dart';
 import 'package:neoeats/features/ui/navigation/navigation_state.dart';
 import 'package:neoeats/features/ui/pages/home/home.dart';
@@ -28,15 +35,23 @@ void main() async {
     databaseFactory = databaseFactoryFfi;
     sqfliteFfiInit();
   }
-  
+
   WidgetsFlutterBinding.ensureInitialized();
   await DatabaseService.instance.database;
 
   await initHive();
-  final categoryRepository = CategoryRepositoryImpl(categoryService: CategoryService());
+  final categoryRepository =
+      CategoryRepositoryImpl(categoryService: CategoryService());
   final getCategoriesUseCase = GetCategoriesUseCase(categoryRepository);
   final dishRepository = DishRepositoryImpl(dishService: DishService());
-  final getAllDishesUseCase = GetAllDishesUseCase(dishRepository: dishRepository);
+  final getAllDishesUseCase =
+      GetAllDishesUseCase(dishRepository: dishRepository);
+  final orderItemService = OrderItemService();
+  final orderItemRepository = OrderItemRepositoryImpl(orderItemService);
+  final fetchAllOrderItems = FetchAllOrderItems(orderItemRepository);
+  final saveOrderItem = SaveOrderItem(orderItemRepository);
+  final updateOrderItemQuantity = UpdateOrderItemQuantity(orderItemRepository);
+  final getDishByIdUseCase = GetDishByIdUseCase(dishRepository);
 
   runApp(
     MultiBlocProvider(
@@ -47,6 +62,14 @@ void main() async {
         ),
         BlocProvider(
           create: (_) => DishBloc(getAllDishesUseCase)..add(FetchDishes()),
+        ),
+        BlocProvider(
+          create: (_) => OrderBloc(
+            fetchAllOrderItems: fetchAllOrderItems,
+            saveOrderItem: saveOrderItem,
+            updateOrderItemQuantity: updateOrderItemQuantity,
+            getDishByIdUseCase: getDishByIdUseCase,
+          )..add(FetchOrders()),
         ),
       ],
       child: const ProviderScope(

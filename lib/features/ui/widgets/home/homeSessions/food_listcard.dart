@@ -3,8 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:neoeats/core/constants/colors.dart';
 import 'package:neoeats/core/providers/food_provider.dart';
 import 'package:neoeats/features/data/models/dish_model.dart';
+import 'package:neoeats/features/data/models/order_item_modal.dart';
 import 'package:neoeats/features/ui/controllers/bloc/dish_bloc.dart';
+import 'package:neoeats/features/ui/controllers/bloc/order_bloc.dart';
 import 'package:neoeats/features/ui/controllers/events/dish_event.dart';
+import 'package:neoeats/features/ui/controllers/events/order_events.dart';
 import 'package:neoeats/features/ui/controllers/state/dish_state.dart';
 import 'package:neoeats/features/ui/pages/details/details_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,8 +68,9 @@ class FoodListCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
-        if(dish.image == null) {
-          dish.image = 'https://as2.ftcdn.net/v2/jpg/02/98/69/09/1000_F_298690986_qYbAKr1wNbUtTqZ2YJGm3C737FoetfSZ.jpg';
+        if (dish.image == null) {
+          dish.image =
+              'https://as2.ftcdn.net/v2/jpg/02/98/69/09/1000_F_298690986_qYbAKr1wNbUtTqZ2YJGm3C737FoetfSZ.jpg';
         };
 
         ref.read(selectedFoodProvider.notifier).state = dish;
@@ -130,7 +134,19 @@ class FoodListCard extends ConsumerWidget {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          OrderItem orderItem = OrderItem(
+                            orderId: 1,
+                            dishId: dish.id!,
+                            quantity: 1,
+                            unitPrice: dish.price,
+                            name: dish.name,
+                            image: dish.image,
+                            description: dish.description,
+                          );
+
+                          context.read<OrderBloc>().add(AddDishToOrderEvent(orderItem));
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.red,
                           shape: RoundedRectangleBorder(

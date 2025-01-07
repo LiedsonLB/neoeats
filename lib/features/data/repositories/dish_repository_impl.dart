@@ -21,6 +21,15 @@ class DishRepositoryImpl implements DishRepository {
   }
 
   @override
+  Future<Dish> fetchDishById(int id) async {
+    try {
+      return await dishService.fetchDishById(id);
+    } catch (e) {
+      throw DishFetchFailure('Error retrieving dish');
+    }
+  }
+
+  @override
   Future<Dish> fetchDish(String name) async {
     try {
       return await dishService.fetchDish(name);

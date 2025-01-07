@@ -24,13 +24,11 @@ class DatabaseService {
       onCreate: _createDB,
     );
 
-    // Ativa suporte para chaves estrangeiras.
     await db.execute('PRAGMA foreign_keys = ON;');
     return db;
   }
 
   Future _createDB(Database db, int version) async {
-    // Criação das tabelas
     await db.execute('''
       CREATE TABLE Client (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -103,6 +101,9 @@ class DatabaseService {
     await db.execute('''
       CREATE TABLE OrderItem (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        image TEXT,
+        description TEXT,
         order_id INTEGER NOT NULL,
         dish_id INTEGER NOT NULL,
         quantity INTEGER NOT NULL,
@@ -148,6 +149,31 @@ class DatabaseService {
           conflictAlgorithm: ConflictAlgorithm.ignore,
         );
       }
+
+      await db.insert(
+        'Client',
+        {
+          'name': 'client',
+          'email': '',
+          'access': 'client',
+          'registration_date': DateTime.now().toIso8601String(),
+        },
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
+
+      int userId = 1;
+      String orderNumber = '#${DateTime.now().millisecondsSinceEpoch}';
+
+      await db.insert(
+        'OrderDish',
+        {
+          'user_id': userId,
+          'order_date': DateTime.now().toIso8601String(),
+          'status': 'open',
+          'order_number': orderNumber,
+        },
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
 
       for (var table in TablesMock.tables) {
         await db.insert(

@@ -62,6 +62,7 @@ class DetailsPage extends ConsumerWidget {
         ),
         body: selectedFood != null
             ? DetailsSession(
+                foodId: selectedFood.id!,
                 foodName: selectedFood.name,
                 foodPrice: selectedFood.price.toString(),
                 foodDescription: selectedFood.description!,

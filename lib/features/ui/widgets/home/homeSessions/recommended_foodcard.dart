@@ -13,6 +13,7 @@ class RecommendedFoodCard extends ConsumerWidget {
     return GestureDetector(
       onTap: () {
         ref.read(selectedFoodProvider.notifier).state = Dish(
+          id: 999,
           name: 'Pizza de Parrila',
           price: 98.00,
           description: 'A pizza parrilla é preparada na grelha...',

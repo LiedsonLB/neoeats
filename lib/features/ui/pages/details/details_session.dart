@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neoeats/core/constants/colors.dart';
+import 'package:neoeats/features/data/models/order_item_modal.dart';
+import 'package:neoeats/features/ui/controllers/bloc/order_bloc.dart';
+import 'package:neoeats/features/ui/controllers/events/order_events.dart';
 
 class DetailsSession extends StatelessWidget {
+  final int foodId;
   final String foodName;
   final String foodPrice;
   final String foodDescription;
@@ -13,6 +18,7 @@ class DetailsSession extends StatelessWidget {
     required this.foodPrice,
     required this.foodDescription,
     required this.foodImageUrl,
+    required this.foodId,
   });
 
   @override
@@ -122,7 +128,21 @@ class DetailsSession extends StatelessWidget {
                         borderRadius: BorderRadius.circular(25),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      OrderItem orderItem = OrderItem(
+                        orderId: 1,
+                        dishId: foodId,
+                        quantity: 1,
+                        unitPrice: double.parse(foodPrice),
+                        name: foodName,
+                        image: foodImageUrl,
+                        description: foodDescription,
+                      );
+
+                      context
+                          .read<OrderBloc>()
+                          .add(AddDishToOrderEvent(orderItem));
+                    },
                     child: const Text(
                       'Adicionar',
                       style: TextStyle(
